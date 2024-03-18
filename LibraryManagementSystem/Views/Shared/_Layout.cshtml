@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LibraryManagementSystem</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LibraryManagementSystem.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    @*<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">*@
+
+    <style>
+        .heading {
+            display: flex;
+            align-items: 60px;
+            justify-content:;
+            background-color: burlywood;
+            height: 0px;
+        }
+
+        .fa-iconn {
+            /* Replace 'fa-icon' with the class of your icon */
+            background: #3B5998;
+            color: white;
+            margin-right: 10px; /* Adjust as needed */
+        }
+
+        .heading-text {
+            text-align: center;
+            justify-content: center;
+        }
+
+        .site-logo {
+            display: inline-block;
+            margin-right: 50px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header">
+        <main role="main" class="pb-10">
+            <div class="heading">
+                @*                <i class="fas fa-iconn"></i>
+                *@                <a b-spbznog2vl="" class="navbar-brand p-0 me-1 me-lg-2 " @*href="https://www.skoolbeep.com/blog/library-management-system/"*@ aria-label="Bootstrap" style="color: cornflowerblue;">
+                    <svg b-spbznog2vl="" xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="d-block my-1" viewBox="0 0 118 94" role="img">
+                        <title>Library Books</title>
+                        <path b-spbznog2vl="" fill-rule="evenodd" clip-rule="evenodd"
+                              d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path>
+                    </svg>
+                </a>
+                @*<a href="#" class="fa fa-facebook disable-cursor"></a>*@
+                <h2 class="heading-text">L M S</h2>
+            </div>
+
+
+            @* <div class="main-header-div">
+            <h1 class='text-center'>
+            Library Management System
+            </h1>
+            </div>*@
+            <div class="main-header-div">
+                <h1 class="text-center">
+                    Library Management System
+                </h1>
+            </div>
+
+
+            <header class="navbar navbar-expand-md navbar-dark bd-navbar">
+                <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation" style="background-color: beige;>
+                    <a b-spbznog2vl="" class="navbar-brand p-0 me-1 me-lg-2 " @*href="https://www.skoolbeep.com/blog/library-management-system/"*@ aria-label="Bootstrap" style="color: cornflowerblue;">
+                        <svg b-spbznog2vl="" xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="d-block my-1" viewBox="0 0 118 94" role="img">
+                            <title>Library Books</title>
+                            <path b-spbznog2vl="" fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path>
+                        </svg>
+                    </a>
+
+                    <div class="collapse navbar-collapse" id="bdNavbar">
+                        <ul class="nav justify-content-center flex-grow-1">
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Student") || User.IsInRole("Librarian"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link text-dark dropdown-toggle" asp-area="" asp-controller="Books" asp-action="" data-bs-toggle="dropdown">Books</a>
+                                        <ul class="dropdown-menu" id="booksDropdown">
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
+                                            {
+                                                <li><a class="dropdown-item" asp-area="" asp-controller="Books" asp-action="AddNewBook">Add New Books</a></li>
+                                            }
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Books" asp-action="ViewBooks">View Books</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Books" asp-action="BookCategories">View Category</a></li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("Staff") || User.IsInRole("Student") || User.IsInRole("Librarian"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link text-dark dropdown-toggle" asp-area="" asp-controller="Student" asp-action="" data-bs-toggle="dropdown">Student</a>
+                                        <ul class="dropdown-menu">
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
+                                            {
+                                                <li><a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="AddStudent">Add Student</a></li>
+                                            }
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="ViewStudents">View Student</a></li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if (!User.IsInRole("Student"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link text-dark dropdown-toggle" asp-area="" asp-controller="IssueBooks" asp-action="" data-bs-toggle="dropdown">Issue Books</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="IssueBooks" asp-action="Index">Issue Book to Student</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="IssueBooks" asp-action="ViewIssuedBooks">View All Issued Books</a></li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link text-dark dropdown-toggle" asp-area="" asp-controller="ReturnBooks" asp-action="" data-bs-toggle="dropdown">Return Books</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="ReturnBooks" asp-action="Index">Return Book</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="ReturnBooks" asp-action="PayFine">Pay Fine</a></li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("Librarian"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link text-dark dropdown-toggle" asp-area="" asp-controller="IssueBooks" asp-action="" data-bs-toggle="dropdown">Role and Books Details</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="CompleteBooksDetails" asp-action="Index">Complete Books Details</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="CreateRole">CreateRole</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="ListRoles">ListRoles</a></li>
+                                            <li><a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="ListUsers">ListUsers</a></li>
+                                        </ul>
+                                            
+                                    </li>
+                                }
+
+                                <div class="navbar-text ms-md-auto" style="color:black">
+                                    @User.Identity.Name!
+                                    @*<a asp-area="LogOut" asp-controller="Auth" asp-action="Logout" style="color:Red" data-bs-target="#logoutConfirmationModal">Logout</a>*@
+                                    <a data-bs-toggle="modal" data-bs-target="#logoutConfirmationModal" style="color:Red">Logout</a>
+                                </div>                                
+                            }
+                            else
+                            {
+                                <div class="navbar-text ms-md-auto">
+                                    <a asp-controller="Auth" asp-action="Login" style="color:Red">Login</a>
+                                </div>
+                            }
+                        </ul>
+                        <hr class="d-md-none text-white-50">
+                    </div>
+                </nav>
+            </header>
+            @RenderBody()
+        </main>
+    </div>
+    <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutConfirmationModalLabel">Logout Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="confirmLogout" class="btn btn-primary">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2023 - LibraryManagementSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+    </footer>*@
+
+    @*<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>*@
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('#confirmLogout').on('click', function () {
+                // Redirect to the logout action
+                window.location.href = '@Url.Action("Logout", "Auth")';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

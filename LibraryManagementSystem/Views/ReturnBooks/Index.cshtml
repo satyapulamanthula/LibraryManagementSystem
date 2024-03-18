@@ -1,0 +1,170 @@
+﻿@model IEnumerable<LibraryManagementSystem.SharedModels.Models.IssuedModel>
+
+@{
+    ViewData["Title"] = "Return Book";
+    var data = Model;
+}
+
+<div id="successMessage" style=" width:600px;margin-left:800px;display:none;" class="alert alert-success" role="alert" ></div>
+
+@*<h2>View Returned Books</h2>
+<br />*@
+
+<div class="container" >
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center">Returning the Books</h2>
+            <div id="returnForm">
+                <form id="returnBookForm">
+                    <div class="form-group">
+                        <label>Student Id</label>
+                        <input id="studentIdInput" class="form-control" />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <button type="button" onclick="fetchData()" class="btn btn-primary">Enter</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="returnTable" style="display:none; height:600px;">
+    <hr />
+    <div class="container">
+        <table id="issuedBooksTable" class="table">
+            <thead>
+                <tr>
+                    <th>Select Book</th>
+                    <th>Book Issued ID</th>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Book Id</th>
+                    <th>Book Name</th>
+                    <th>Issue Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="returnedBooks()">Return</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelReturn()">Cancel</button>
+        </div>
+    </div>
+    
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+
+    function fetchData() {
+        var studentId = $('#studentIdInput').val();
+        debugger;
+        // Perform AJAX request to the server
+        $.ajax({
+            url: '/ReturnBooks/GetStudentDetails',
+            type: 'GET',
+            data: { studentId: studentId, isReturn: false },
+            success: function (data) {
+                //console.log('Received data:', data);
+                // Handle the data and update the table
+                document.getElementById('returnForm').style.display = 'none';
+                document.getElementById('returnTable').style.display = 'block';
+                debugger;
+                updateTable(data);
+            },
+            error: function (error) {
+                console.error('Error fetching data:', error);
+                alert('An error occurred while fetching data.');
+            }
+        });
+    }
+
+    function updateTable(data) {
+        var tableBody = $('#issuedBooksTable tbody');
+        tableBody.empty(); // Clear existing rows
+
+        if (data && data.length > 0) {
+            data.forEach(function (issuedBook) {
+                //console.log('IssueBook is ' + JSON.stringify(issuedBook));
+
+                var row = '<tr>' +
+                    '<td><input type="checkbox" name="selectedBooks" value="' + (issuedBook.issueId || '') + '" /></td>' +
+                    '<td>' + (issuedBook.issueId) + '</td>' +
+                    '<td>' + (issuedBook.studentId) + '</td>' +
+                    '<td>' + (issuedBook.studentName) + '</td>' +
+                    '<td>' + (issuedBook.bookId || '') + '</td>' +
+                    '<td>' + (issuedBook.bookName) + '</td>' +
+                    '<td>' + (issuedBook.issueDate || '') + '</td>' +
+                    '</tr>';
+                tableBody.append(row);
+            });
+            //// Show the table
+            //$('#returnForm').hide();
+            //$('#returnTable').show();
+        } else {
+            alert('No data found for the entered student ID.');
+        }
+    }
+
+    function returnedBooks() {
+        debugger;
+        var studentId = $('#studentIdInput').val();
+
+        var selectedBooks = $('input[name="selectedBooks"]:checked').map(function () {
+            return $(this).val();
+        }).get();
+
+        if (selectedBooks.length > 0) {
+            $.ajax({
+                url: '/ReturnBooks/MarkBooksReturned',
+                type: 'POST',
+                data: { issuedBookIds: selectedBooks, studentId: studentId }, // Fix the variable name here
+                success: function (result) {
+                    console.log('Books returned successfully:', result);
+                    // Check if the response contains a success flag and message
+                    if (result.success) {
+                        $('#successMessage').text(result.message).show();
+                        // Hide the success message after 7 seconds
+                        setTimeout(function () {
+                            $('#successMessage').hide();
+                            // Reload the page after 7 seconds
+                            location.reload();
+                        }, 5000);
+                    } else {
+                        // Display any error message returned from the server
+                        alert('Error: ' + result.message);
+                    }
+                },
+                error: function (error) {
+                    console.error('Error returning books:', error);
+                    alert('An error occurred while returning books.');
+                }
+            });
+        } else {
+            alert("Please select at least one book to mark as returned.");
+        }
+
+    }
+
+    function cancelReturn() {
+        // Clear the form and hide the table
+        $('#studentIdInput').val('');
+        $('#returnForm').show();
+        $('#returnTable').hide();
+    }
+
+    function resetForm() {
+        var form = document.getElementById('AddBook');
+        if (form) {
+            form.reset();
+        }
+    }
+</script>

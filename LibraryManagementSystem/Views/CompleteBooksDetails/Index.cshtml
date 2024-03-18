@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LibraryManagementSystem.SharedModels.Models.IssuedModel>
+
+
+<div class="container" style="height:600px;">
+    <h2>Details of All Issued and Return Books</h2>
+    <hr />
+    <table id="booksTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Issued Id</th>
+                <th>Student Id</th>
+                <th>Student Name</th>
+                <th>Book Id</th>
+                <th>Book Name</th>
+                <th>Issued Date</th>
+                <th>Return Date</th>
+                <th>Is Active</th>
+                <th>Days</th>
+                <th>Fine Amount</th>
+                <th>Is Payed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var bookIssued in Model)
+            {
+                <tr>
+                    <td>@bookIssued.IssueId</td>
+                    <td>@bookIssued.StudentId</td>
+                    <td>@bookIssued.StudentName</td>
+                    <td>@bookIssued.BookId</td>
+                    <td>@bookIssued.BookName</td>
+                    <td>@bookIssued.IssueDate.ToString("dd/mm/yyyy")</td>
+                    <td>@(bookIssued.ReturnedDate.HasValue ? bookIssued.ReturnedDate.Value.ToString("dd/mm/yyyy"): "Null")</td>
+                    <td>@(bookIssued.IsReturn?1:0)</td>
+                    <td>@bookIssued.Days</td>
+                    <td>@bookIssued.FineAmount</td>
+                    <td>@(bookIssued.IsFinePaid ? 1: 0)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#booksTable').DataTable();
+        });
+    </script>
+}

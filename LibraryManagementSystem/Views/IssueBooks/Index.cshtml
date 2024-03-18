@@ -1,0 +1,182 @@
+﻿@model LibraryManagementSystem.SharedModels.Models.IssuedModel
+
+@{
+    ViewData["Title"] = "Issue Book";
+}
+
+@if (!string.IsNullOrEmpty(TempData["WarningMessage"] as string))
+{
+    <div id="successAlert" class="alert alert-success" style="width:600px;margin-left:800px;color: black;background-color: red;">
+        @TempData["WarningMessage"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            $("#successAlert").alert('close');
+        }, 8000);
+    </script>
+}
+@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+{
+    <div id="successAlert" class="alert alert-success" style="width:600px;margin-left:800px;">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            $("#successAlert").alert('close');
+        }, 8000);
+    </script>
+}
+
+@*<h2>Issue Book</h2>
+<hr />*@
+<div class="container" style="height:550px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center">Issue Book</h2>
+            <form asp-action="Index" method="post" id="AddBook" class="needs-validation" novalidate style="margin-left: 225px;margin-right: -900px;">
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="StudentId">Student Id</label>
+                    @*<input asp-for="StudentId" class="form-control" id="SelectStudentId"/>*@
+                    <select asp-for="StudentId" class="form-control" id="SelectStudentId" required>
+                        <option value="">Select the Students Ids</option>
+                    </select>
+                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-3 mb-3">
+                    <label asp-for="BookId">Book Id</label>
+                    @*<input asp-for="BookId" class="form-control" />*@
+                    <select asp-for="BookId" class="form-control" id="SelectBookId" required>
+                        <option value="">Select the Books Ids</option>
+                    </select>
+                    <span asp-validation-for="BookId" class="text-danger"></span>
+
+                </div>
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="IssueDate">Book Issue Date</label>
+                    <input asp-for="IssueDate" class="form-control" />
+                    <span asp-validation-for="IssueDate" class="text-danger"></span>
+                </div>
+                @*<div class="form-group">
+                <label asp-for="ReturnedDate">Book Return Date</label>
+                <input asp-for="ReturnedDate" class="form-control" />
+                </div> <br /> *@
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Issue</button>
+                    <a asp-action="Index" class="btn btn-secondary" onclick="resetForm()">Cancel</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+
+        $(document).ready(function () {
+            debugger;
+            // Make AJAX call to fetch data for students
+            $.ajax({
+                url: '/IssueBooks/GetStudentDetails',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear previous options
+                    $('#SelectStudentId').empty();
+
+                    // Add default option
+                    $('#SelectStudentId').append($('<option>', {
+                        value: '',
+                        text: 'Select a StudentId'
+                    }));
+
+                    // Add options based on fetched data
+                    $.each(data, function (index, student) {
+                        $('#SelectStudentId').append($('<option>', {
+                            value: student.studentId,
+                            text: student.studentId + ' - ' + student.studentName
+                        }));
+                    });
+
+                    setBookId();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('Error:', errorThrown);
+                }
+            });
+
+            // Make AJAX call to fetch data for books
+            $.ajax({
+                url: '/IssueBooks/GetBookDetails',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Clear previous options
+                    $('#SelectBookId').empty();
+
+                    // Add default option
+                    $('#SelectBookId').append($('<option>', {
+                        value: '',
+                        text: 'Select a category'
+                    }));
+
+                    // Add options based on fetched data
+                    $.each(data, function (index, book) {
+                        $('#SelectBookId').append($('<option>', {
+                            value: book.bookId,
+                            text: book.bookId + ' - ' + book.bookName
+                        }));
+                    });
+
+                    setBookId();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('Error:', errorThrown);
+                }
+            });
+
+            // Event listener for selecting a student
+            $('#SelectStudentId').change(function () {
+                var studentId = $(this).val();
+                var studentName = $(this).find('option:selected').text();
+                $('#studentDetails').val(studentId + ' - ' + studentName);
+            });
+
+            // Event listener for selecting a book
+            $('#SelectBookId').change(function () {
+                var bookId = $(this).val();
+                var bookName = $(this).find('option:selected').text();
+                $('#bookDetails').val(bookId + ' - ' + bookName);
+            });
+
+            function setBookId() {
+                // Retrieve the bookId parameter from the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                var bookId = urlParams.get('bookId');
+
+                // Set the value of the BookId input field if bookId is not null
+                if (bookId != null) {
+                    // Set the selected book ID in the dropdown
+                    $('#SelectBookId').val(bookId);
+                    // Trigger the change event to update the book details
+                    $('#SelectBookId').change();
+                }
+            }
+        });
+
+        function resetForm() {
+            var form = document.getElementById('AddBook');
+            if (form) {
+                form.reset();
+            }
+        }
+
+    </script>
+}
+
+
+
+

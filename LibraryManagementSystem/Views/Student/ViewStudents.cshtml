@@ -1,0 +1,168 @@
+﻿@model IEnumerable<LibraryManagementSystem.SharedModels.Models.StudentEnrolmentModel>
+
+<div class="container" style="height:600px;">
+    <h2>Viewing Students</h2>
+    <hr />
+    <table id="studentTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>StudentId</th>
+                <th>StudentName</th>
+                <th>Department</th>
+                <th style="width: 90.2px;">Semester</th>
+                <th>Date Of Birth</th>
+                <th>StudentContact</th>
+                <th style="width: 80.2px;">IsActive</th>
+                <th style="width: 186.2px;">StudentEmail</th>
+                @*<th>Action</th>*@
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.StudentName</td>
+                    <td>@student.Department</td>
+                    <td>@student.Semester</td>
+                    <td>@student.DateOfBirth.ToString("dd/mm/yyyy")</td>
+                    <td>@student.StudentContact</td>
+                    <td>@(student.IsActive ? 1 : 0)</td>
+                    <td>@student.StudentEmail</td>
+                    @*<td><button class="btn btn-primary edit-btn">Edit</button></td>*@ 
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@*<!-- Modal for editing student details -->
+<div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form for editing student details -->
+                <form id="editStudentForm">
+                    <input type="hidden" id="editStudentId" name="studentId" />
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editStudentName">Name</label>
+                                <input type="text" class="form-control" id="editStudentName" name="studentName">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editDepartment">Department</label>
+                                <input type="text" class="form-control" id="editDepartment" name="department">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editSemester">Semester</label>
+                                <input type="number" class="form-control" id="editSemester" name="semester">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editDateOfBirth">Date Of Birth</label>
+                                <input type="text" class="form-control" id="editDateOfBirth" name="dateOfBirth">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editContactNumber">Contact Number</label>
+                                <input type="number" class="form-control" id="editContactNumber" name="contactNumber">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="editEmail">Email</label>
+                                <input type="text" class="form-control" id="editEmail" name="email">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="row">
+                        <div class="col text-center" style="margin-top: 10px;">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>*@
+@section scripts {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#studentTable').DataTable();
+
+            //// Handle edit button click
+            //$('#studentTable').on('click', '.edit-btn', function () {
+            //    debugger;
+            //    var $row = $(this).closest('tr');
+            //    var studentId = $row.find('td:eq(0)').text();
+            //    var studentName = $row.find('td:eq(1)').text();
+            //    var department = $row.find('td:eq(2)').text(); 
+            //    var semester = $row.find('td:eq(3)').text();
+            //    var dateOfBirth = $row.find('td:eq(4)').text();
+            //    var studentContact = $row.find('td:eq(5)').text();
+            //    var studentEmail = $row.find('td:eq(7)').text();
+            //    console.log("Date of Birth from table:", dateOfBirth);
+
+            //    // Populate form fields with student details
+            //    $('#editStudentId').val(studentId);
+            //    $('#editStudentName').val(studentName);
+            //    $('#editDepartment').val(department);
+            //    $('#editSemester').val(semester);
+            //    $('#editDateOfBirth').val(dateOfBirth);
+            //    $('#editContactNumber').val(studentContact);
+            //    $('#editEmail').val(studentEmail);
+
+
+            //    // Show the modal
+            //    $('#editStudentModal').modal('show');
+            //});
+
+            //// Handle form submission
+            //$('#editStudentForm').submit(function (e) {
+            //    e.preventDefault();
+                
+            //    // Collect form data
+            //    var formData = $(this).serialize();
+
+            //    // Send AJAX request to save the edited student details
+            //    $.ajax({
+            //        url: '/Students/Edit', // Specify your edit endpoint
+            //        type: 'POST',
+            //        data: formData,
+            //        success: function (response) {
+            //            // Handle success response
+            //            $('#editStudentModal').modal('hide'); // Close the modal
+            //            // Optionally, update the table with the new data
+            //        },
+            //        error: function (xhr, status, error) {
+            //            // Handle error response
+            //            console.error(xhr.responseText);
+            //        }
+            //    });
+            //});
+        });
+    </Script>       
+}

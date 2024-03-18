@@ -1,0 +1,247 @@
+﻿@model LibraryManagementSystem.SharedModels.Models.StudentEnrolmentModel
+
+@{
+    ViewData["Title"] = "AddStudent";
+}
+
+@*@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div id="successAlert" class="alert alert-success" style="width:600px;margin-left:800px;">
+        @ViewBag.SuccessMessage
+    </div>
+
+    <script>
+        setTimeout(function () {
+            $("#successAlert").alert('close');
+        }, 4000);
+    </script>
+}*@
+@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+{
+    <div id="successAlert" class="alert alert-success" style="width:600px;margin-left:800px;">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            $("#successAlert").alert('close');
+        }, 8000);
+    </script>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" style="width: 600px; margin-left: 800px;">
+        <ul>
+            @foreach (var key in ViewData.ModelState.Keys)
+            {
+                foreach (var error in ViewData.ModelState[key].Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    </div>
+}
+
+
+<div class="container" style="height:auto;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center">Add New Student</h2>
+            <form asp-action="AddStudent" method="post" id="AddStudent" class="needs-validation" novalidate style="margin-left: 120px;margin-right: -900px;">
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="StudentName">Name</label>
+                    <input asp-for="StudentName" class="form-control" />
+                    <span asp-validation-for="StudentName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Department">Department</label>
+                    <input asp-for="Department" class="form-control" />
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="Semester">Semester</label>
+                    <input asp-for="Semester" type="number" class="form-control" />
+                    <span asp-validation-for="Semester" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="DateOfBirth">Date Of Birth</label>
+                    <input asp-for="DateOfBirth" class="form-control" id="studentDob" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="StudentContact">Contact number</label>
+                    <input asp-for="StudentContact" class="form-control" />
+                    <span asp-validation-for="StudentContact" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-4 mb-3">
+                    <label asp-for="StudentEmail">Email address</label>
+                    <input asp-for="StudentEmail" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                    <span asp-validation-for="StudentEmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="StartDate">Start Date</label>
+                    <input asp-for="StartDate" class="form-control" id="fromDate" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-2 mb-3">
+                    <label asp-for="EndDate">End Date</label>
+                    <input asp-for="EndDate" class="form-control" id="toDate" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+
+                @*<div class="form-group col-12">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="validateAndShowModal()">Save</button>
+                    <a asp-action="AddStudent" class="btn btn-secondary" onclick="resetForm()">Cancel</a>
+                </div>*@
+                <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="AddStudent" class="btn btn-secondary" onclick="resetForm()">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Confirm Save</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to save the Student Details?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveChanges()">Save Student Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <!-- Include jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include jQuery UI Library -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+                //$("#fromDate").datepicker({
+                //    format: 'dd-mm-yyyy',
+                //    autoclose: true,
+                //}).on('changeDate', function (selected) {
+                //    var minDate = new Date(selected.date.valueOf());
+                //    $('#toDate').datepicker('setStartDate', minDate);
+                //});
+
+                //$("#toDate").datepicker({
+                //    format: 'dd-mm-yyyy',
+                //    autoclose: true,
+                //}).on('changeDate', function (selected) {
+                //    var minDate = new Date(selected.date.valueOf());
+                //    $('#fromDate').datepicker('setEndDate', minDate);
+                //});
+            });
+
+        function validateAndShowModal() {
+            debugger;
+            var form = document.getElementById("AddStudent");
+            debugger;
+
+            // Check if form is valid
+            if (form.checkValidity() === false) {
+                // If form is invalid, trigger HTML5 form validation
+                form.reportValidity();
+                return; // Prevent showing the modal
+            }
+
+            // Additional validation checks
+            var studentDob = new Date(document.getElementById("studentDob").value);
+            var startDate = new Date(document.getElementById("fromDate").value);
+            var endDate = new Date(document.getElementById("toDate").value);
+
+            var today = new Date();
+            var minDob = new Date(today);
+            minDob.setFullYear(today.getFullYear() - 18); // Minimum age of 20 years
+
+            // Perform additional checks
+            if (studentDob > minDob) {
+                alert("Student must be at least 18 years old.");
+                clearFieldById('studentDob');
+                return; // Prevent form submission
+            } else if (endDate <= startDate) {
+                alert("End date must be greater than start date.");
+                clearFieldById('toDate');
+                return; // Prevent form submission
+            } else if ((endDate - startDate) < (6 * 30 * 24 * 60 * 60 * 1000)) {
+                alert("End date must be at least 6 months greater than start date.");
+                clearFieldById('toDate');
+                return; // Prevent form submission
+            } else {
+                debugger;
+                // If all checks pass, show the modal
+                $('#exampleModalCenter').modal('show');
+            }
+        }
+
+
+        function saveChanges() {
+            debugger;
+            var form = document.getElementById("AddStudent");
+
+            // Check if the form is valid
+            if (form.checkValidity() === false) {
+                // If the form is invalid, trigger HTML5 form validation
+                form.reportValidity();
+                return; // Prevent form submission
+            }
+
+            // If the form is valid, submit it programmatically
+            form.submit();
+
+            // Hide the modal after form submission
+            closeModal();
+
+            //    // Implement your logic to save changes or submit the form
+            //    document.getElementById("AddStudent").submit()
+
+            //    //alert("Student details are saved");
+            //    closeModal();
+        }
+        //function saveChanges() {
+        //    
+        //}
+
+        function closeModal() {
+            $('#exampleModalCenter').modal('hide');
+        }
+
+        function clearFieldById(fieldId) {
+            // Clear the value of the specified field
+            document.getElementById(fieldId).value = "";
+        }
+
+        function resetForm() {
+            debugger;
+            var form = document.getElementById('AddBook');
+            if (form) {
+                form.reset();
+            }
+        }
+
+    </script>
+    }
