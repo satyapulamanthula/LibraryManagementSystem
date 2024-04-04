@@ -71,7 +71,7 @@ public class BooksController : Controller
             // Save the new category to the database
             _bookService.CreateCategory(newCategory);
             // Set success message
-            ViewBag.SuccessMessage = "Student added successfully.";
+            ViewBag.SuccessMessage = "BookCategorie added successfully.";
             // Return a JSON response indicating success
             return Json(new { success = true });
         }
@@ -104,5 +104,11 @@ public class BooksController : Controller
             return View(categories);
         }
     }
+
+    //public IActionResult GetAllSemestersData()
+    //{
+    //    var Semesters = _bookService.GetSemestersData();
+    //    return Json(Semesters);
+    //}
 
 }

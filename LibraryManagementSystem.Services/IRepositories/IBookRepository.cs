@@ -7,6 +7,7 @@ namespace LibraryManagementSystem.Repository.IRepositories
     {
         List<Book> GetAllBooks();
         List<BooksCategory> GetAllBookCatedgories();
+        //List<Semesters> GetAllSemesters();
         void CreateBook(BookModel book);
         void CreateBookCategory(BookCategories bookCategories);
     }

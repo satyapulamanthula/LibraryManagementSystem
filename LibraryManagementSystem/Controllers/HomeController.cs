@@ -17,8 +17,19 @@ namespace LibraryManagementSystem.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
+            //// Check if the user is authenticated and in the Admin role
+            //if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            //{
+            //    ViewData["Layout"] = "~/Views/Shared/AdminLayout.cshtml";
+            //}
+            //else
+            //{
+            //    ViewData["Layout"] = "~/Views/Shared/UserLayout.cshtml";
+            //}
+
             return View();
         }
 

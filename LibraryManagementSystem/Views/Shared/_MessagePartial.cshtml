@@ -1,0 +1,13 @@
+﻿@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+{
+    <div id="successAlert" class="alert alert-success" role="alert" style="width:600px;margin-left:800px;">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        // Use the correct ID in the jQuery selector
+        setTimeout(function () {
+            $("#successAlert").alert('close');
+        }, 8000);
+    </script>
+}

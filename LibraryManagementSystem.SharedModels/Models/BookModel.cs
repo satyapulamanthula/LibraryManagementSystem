@@ -25,5 +25,7 @@ namespace LibraryManagementSystem.SharedModels.Models
 
         [Required(ErrorMessage = "Subject type is required.")]
         public string Subject { get; set; }
+
+        //public string Semester { get; set; }
     }
 }

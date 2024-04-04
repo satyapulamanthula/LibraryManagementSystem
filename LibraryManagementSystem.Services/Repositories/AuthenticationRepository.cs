@@ -257,7 +257,6 @@ namespace LibraryManagementSystem.Repository.Repositories
 
 
         //User
-
         public async Task<List<ApplicationUser>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();

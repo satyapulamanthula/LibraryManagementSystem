@@ -14,33 +14,38 @@ public class AuthController : Controller
 {
     private readonly IAuthenticationService _authenticationService;
     private ILibraryManagementLogger _logger;
-    private readonly LibraryDbContext _libraryDbContext;
-    //
     private readonly RoleManager<IdentityRole> _roleManager;
-    //private readonly UserManager<ApplicationUser> _userManager;
 
 
-    public AuthController(IAuthenticationService authenticationService, ILibraryManagementLogger libraryManagementLogger, LibraryDbContext libraryDbContext, RoleManager<IdentityRole> roleManager/*,UserManager<ApplicationUser> userManager*/)
+    public AuthController(IAuthenticationService authenticationService, ILibraryManagementLogger libraryManagementLogger, RoleManager<IdentityRole> roleManager)
     {
         _authenticationService = authenticationService;
         _logger = libraryManagementLogger;
-        _libraryDbContext = libraryDbContext;
-        //
         _roleManager = roleManager;
-        //_userManager = userManager;
     }
 
-    // GET: /Auth/Login
     public IActionResult Login()
     {
+        //if (User.Identity.IsAuthenticated)
+        //{
+        //    return RedirectToAction("Index", "Home");
+        //}
+        //else
+        //{
+        //    if (TempData.ContainsKey("SuccessMessage"))
+        //    {
+        //        ViewBag.SuccessMessage = TempData["SuccessMessage"].ToString();
+        //    }
+
+        //    return View();
+        //}
+
         // Check if the user is already authenticated
         if (User.Identity.IsAuthenticated)
         {
             // If the user is authenticated, sign them out
             return RedirectToAction("Logout");
         }
-
-        // If the user is not authenticated, display the login page
         return View();
     }
 
@@ -59,7 +64,6 @@ public class AuthController : Controller
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("Login Successfuly");
                 return RedirectToAction("Index", "Home");
             }
 
@@ -113,6 +117,8 @@ public class AuthController : Controller
                     return View("Register", model);
                 }
 
+                // Set success message
+                TempData["SuccessMessage"] = "Registration successful!";
                 // Redirect to the "Login" page with a success parameter
                 return RedirectToAction("Login", new { email = model.Email, success = true });
             }
@@ -299,18 +305,15 @@ public class AuthController : Controller
         }
         else
         {
-            // Populate the user instance with the data from EditUserViewModel
             user.Email = model.Email;
             user.UserName = model.UserName;
-            //user.FirstName = model.FirstName;
-            //user.LastName = model.LastName;
 
-            // Call the repository method to update the user
             bool result = await _authenticationService.UpdateUser(user);
 
             if (result)
             {
-                // Once user data updated, redirect to the ListUsers view
+                // Set a success message in TempData
+                TempData["SuccessMessage"] = "User updated successfully.";
                 return RedirectToAction("ListUsers");
             }
             else
@@ -322,9 +325,6 @@ public class AuthController : Controller
         }
     }
 
-
-
-
     [HttpPost]
     public async Task<IActionResult> DeleteUser(string userId)
     {
@@ -333,6 +333,7 @@ public class AuthController : Controller
         if (isDeleted)
         {
             // User successfully deleted
+            TempData["SuccessMessage"] = "User deleted successfully.";
             return RedirectToAction("ListUsers");
         }
         else

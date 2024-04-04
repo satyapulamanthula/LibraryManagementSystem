@@ -68,7 +68,7 @@ namespace LibraryManagementSystem.Repository.Repositories
                     issueToUpdate.IsReturn = true;
                     issueToUpdate.ReturnedDate = DateTime.Now;
 
-                    // Calculate the difference between StartDate and ReturnedDate
+                    // Calculating the days between StartDate and ReturnedDate and checking the given date
                     var daysDifference = (issueToUpdate.ReturnedDate.Value - issueToUpdate.IssueDate).Days;
                     issueToUpdate.Days = daysDifference;
                     if (daysDifference <= 30)
@@ -88,7 +88,7 @@ namespace LibraryManagementSystem.Repository.Repositories
                     }
                     else
                     {
-                        issueToUpdate.FineAmount = 30; // Or any other amount you need
+                        issueToUpdate.FineAmount = 30;
                         issueToUpdate.IsFinePaid = false;
                     }
                 }
@@ -109,7 +109,6 @@ namespace LibraryManagementSystem.Repository.Repositories
                 _dbContext.SaveChanges();
             }
         } 
-
 
         public List<Issued> GetAllIssuedBooks()
         {

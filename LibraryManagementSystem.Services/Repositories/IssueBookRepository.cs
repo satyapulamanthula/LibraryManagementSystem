@@ -30,31 +30,29 @@ namespace LibraryManagementSystem.Repository.Repositories
                 else
                 {
                     // Check if the student has already issued three books and book is active or not 
-                    int studentId = issued.StudentId;
-                    int bookId = issued.BookId;
+                    //int studentId = issued.StudentId;
+                    //int bookId = issued.BookId;
                     int issuedBooksCount = _dbContext.Issued
-                        .Count(i => i.StudentId == studentId && i.IsReturn == false);
+                        .Count(i => i.StudentId == issued.StudentId && i.IsReturn == false);
 
                     if (issuedBooksCount >= 3)
                     {
                         // Student has already issued three books
-                        _logger.LogWarning($"Student with ID {studentId} has already issued three books.");
+                        _logger.LogWarning($"Student with ID {issued.StudentId} has already issued three books.");
                         return false;
                     }
 
-                    //bool issuedBook = _dbContext.Issued.Any(i => i.BookId == bookId && i.IsReturn == true);
-                    //if (issuedBook = true)
-                    //{
-                    //    // Book has already issued
-                    //    _logger.LogWarning($"This book is already issued to someone");
-                    //    // You can throw an exception or return an appropriate response here
-                    //    // Depending on your application logic
-                    //    return;
-                    //}
+                    bool issuedBook = _dbContext.Issued.Any(i => i.BookId == issued.BookId && i.IsReturn == true);
+                    if (issuedBook == true)
+                    {
+                        // Book has already issued
+                        _logger.LogWarning($"This book is already issued to someone");
+                        return false;
+                    }
 
-                    // Continue with the issuance process
-                    _dbContext.Issued.Add(issued);
-                    _dbContext.SaveChanges();
+                    //// Continue with the issuance process
+                    //_dbContext.Issued.Add(issued);
+                    //_dbContext.SaveChanges();
 
                     // After SaveChanges, the book entity will be updated with the generated BookId
                     int issuedBookId = issued.IssueId;

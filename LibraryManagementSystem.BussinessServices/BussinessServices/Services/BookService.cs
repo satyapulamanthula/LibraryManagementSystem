@@ -36,5 +36,10 @@ namespace LibraryManagementSystem.Services.BussinessServices.Services
         {
             return _bookRepository.GetAllBookCatedgories();
         }
+
+        //public IEnumerable<Semesters> GetSemestersData()
+        //{
+        //    return _bookRepository.GetAllSemesters();
+        //}
     }
 }

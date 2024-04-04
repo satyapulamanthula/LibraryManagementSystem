@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.Controllers
 {
-    [Authorize]
+    //[Authorize]
+    [Authorize(Roles = "Admin")]
     public class CompleteBooksDetailsController : Controller
     {
         private readonly IIssuedBookService _issuedBookService;

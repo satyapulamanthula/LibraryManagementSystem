@@ -12,6 +12,7 @@ namespace LibraryManagementSystem.Services.BussinessServices.IServices
     {
         IEnumerable<Book> GetAllBooks();
         IEnumerable<BooksCategory> GetBookCategories();
+        //IEnumerable<Semesters> GetSemestersData();
         void CreateBook(BookModel book);
         void CreateCategory(BookCategories bookCategories);
     }

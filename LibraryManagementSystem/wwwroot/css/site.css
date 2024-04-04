@@ -802,10 +802,15 @@ input[type='radio']:checked:after {
     background-color: antiquewhite;
 }
 
-.main-header-div {
-    background-color: burlywood;
-    height:47px;
+/*.main-header-div {
+    background-color: burlywood , #3f3f46;
+    height:47px;*/
    /* height: 65px;*/
+/*}*/
+.main-header-div {
+    background-color: #27699c;
+    height: 47px;
+    /* height: 65px;*/
 }
 
 .color-red{
@@ -876,4 +881,16 @@ input[type='radio']:checked:after {
 
 .pb-10 {
     padding-bottom: 10rem !important
+}
+
+.table-header {
+    background-color: #317bbc;
+}
+.table-body {
+    background-color: #77a6d11a;
+}
+
+.Heading-of-LMS {
+    color: antiquewhite;
+    margin-top: 4px;
 }

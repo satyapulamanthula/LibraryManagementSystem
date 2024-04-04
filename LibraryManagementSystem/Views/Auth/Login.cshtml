@@ -14,6 +14,19 @@
     </script>
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div id="SuccesAlert" class="alert alert-success" role="alert" style="width:600px;margin-left:800px;">
+        @ViewBag.SuccessMessage
+    </div>
+    <script>
+        // Hide the alert after 7 seconds (7000 milliseconds)
+        setTimeout(function () {
+            $("#SuccesAlert").alert('close');
+        }, 7000);
+    </script>
+}
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <section class="vh-100">
     <div class="container-fluid h-custom">

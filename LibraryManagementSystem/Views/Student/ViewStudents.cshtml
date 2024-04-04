@@ -1,10 +1,17 @@
 ﻿@model IEnumerable<LibraryManagementSystem.SharedModels.Models.StudentEnrolmentModel>
 
+@{
+// Get the user's roles
+var userRoles = (User as ClaimsPrincipal)?.Claims
+    .Where(c => c.Type == ClaimTypes.Role)
+    .Select(c => c.Value);
+}
+
 <div class="container" style="height:600px;">
     <h2>Viewing Students</h2>
     <hr />
     <table id="studentTable" class="table table-striped table-bordered">
-        <thead>
+        <thead class="table-header">
             <tr>
                 <th>StudentId</th>
                 <th>StudentName</th>
@@ -18,7 +25,7 @@
                 
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-body">
             @foreach (var student in Model)
             {
                 <tr>
@@ -33,7 +40,7 @@
                     @*<td><button class="btn btn-primary edit-btn">Edit</button></td>*@ 
                 </tr>
             }
-        </tbody>
+        </tbodyclass>
     </table>
 </div>
 

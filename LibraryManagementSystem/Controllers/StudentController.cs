@@ -4,17 +4,18 @@ using LibraryManagementSystem.Services.BussinessServices.Services;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LibraryManagementSystem.Controllers
 {
     [Authorize]
     public class StudentController : Controller
     {
-        private readonly IStudentService _studentRepository;
+        private readonly IStudentService _studentService;
 
         public StudentController(IStudentService studentRepository)
         {
-            _studentRepository = studentRepository;
+            _studentService = studentRepository;
         }
         public IActionResult Index()
         {
@@ -34,7 +35,7 @@ namespace LibraryManagementSystem.Controllers
             {
                 try
                 {
-                    _studentRepository.CreateStudent(studentEnrolment);
+                    _studentService.CreateStudent(studentEnrolment);
 
                     TempData["SuccessMessage"] = "Student added successfully.";
 
@@ -60,35 +61,9 @@ namespace LibraryManagementSystem.Controllers
             }
         }
 
-
-
-
-        //// POST
-        //[HttpPost]
-        //public IActionResult AddStudent(StudentEnrolmentModel studentEnrolment)
-        //{
-        //    if (ModelState.IsValid /*&& studentEnrolment != null*/)
-        //    {
-        //            _studentRepository.CreateStudent(studentEnrolment);
-
-        //            //// Set success message
-        //            //ViewBag.SuccessMessage = "Student added successfully.";
-
-        //            // Set success message in TempData
-        //            TempData["SuccessMessage"] = "Book added successfully.";
-
-        //            return RedirectToAction("AddStudent");
-
-        //    }
-        //    else
-        //    {
-        //        return View(studentEnrolment);
-        //    }
-        //}
-
         public IActionResult ViewStudents()
         {
-            var students = _studentRepository.GetAllStudents();
+            var students = _studentService.GetAllStudents();
             return View(students);
         }
     }
