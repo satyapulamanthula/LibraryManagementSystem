@@ -26,7 +26,6 @@ namespace LibraryManagementSystem.Repository.Repositories
             List<StudentEnrolmentModel> students = _dbContext.StudentEnrolments
                 .Select(se => new StudentEnrolmentModel
                 {
-                    // Copy properties from StudentEnrolment to StudentEnrolment1
                     StudentId = se.StudentId,
                     StudentName = se.StudentName,
                     Department = se.Department,
@@ -49,7 +48,7 @@ namespace LibraryManagementSystem.Repository.Repositories
                 if (student == null)
                 {
                     _logger.LogWarning("Student Details are empty");
-                    return; // Exit method if student is null
+                    return;
                 }
 
                 // Checking that student with the same ID or email already exists or not

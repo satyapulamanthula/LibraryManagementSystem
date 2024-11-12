@@ -50,9 +50,9 @@ namespace LibraryManagementSystem.Repository.Repositories
                         return false;
                     }
 
-                    //// Continue with the issuance process
-                    //_dbContext.Issued.Add(issued);
-                    //_dbContext.SaveChanges();
+                    // Continue with the issuance process
+                    _dbContext.Issued.Add(issued);
+                    _dbContext.SaveChanges();
 
                     // After SaveChanges, the book entity will be updated with the generated BookId
                     int issuedBookId = issued.IssueId;

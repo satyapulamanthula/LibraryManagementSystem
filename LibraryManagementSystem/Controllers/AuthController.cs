@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LibraryManagementSystem.SharedModels.Models;
-using LibraryManagementSystem.Services.BussinessServices.Services;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.Repository.IRepositories;
 using Microsoft.AspNetCore.Identity;
-using LibraryManagementSystem.Repository.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
