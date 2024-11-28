@@ -1,76 +1,82 @@
-﻿using LibraryManagementSystem.SharedModels.Models;
+﻿using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.Repository.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementSystem.Data.Entities;
-using System.Diagnostics;
-using System.Xml.Linq;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using NLog;
 
 namespace LibraryManagementSystem.Repository.Repositories
 {
+
     public class BookRepository : IBookRepository
     {
         private readonly LibraryDbContext _dbContext;
-        private readonly ILibraryManagementLogger _logger;
+        private readonly IDistributedCache _cache;
+        private readonly ILogger<BookRepository> _logger;
 
-        public BookRepository(LibraryDbContext dbContext, ILibraryManagementLogger libraryManagementLogger)
+        public BookRepository(LibraryDbContext dbContext, IDistributedCache cache, ILogger<BookRepository> logger)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _logger = libraryManagementLogger ?? throw new ArgumentNullException(nameof(libraryManagementLogger));
-        }
-        public List<Book> GetAllBooks()
-        {
-            return _dbContext.Books.ToList();
+            _dbContext = dbContext;
+            _cache = cache;
+            _logger = logger;
         }
 
-        public List<BooksCategory> GetAllBookCatedgories()
+        //GetAllBooksWithCaching
+        public async Task<List<Book>> GetAllBooks()
         {
-            return _dbContext.BookCategories.ToList();
+            var cacheKey = "all_books";
+            var cachedBooks = await _cache.GetStringAsync(cacheKey);
+            if (cachedBooks != null)
+            {
+                return JsonConvert.DeserializeObject<List<Book>>(cachedBooks);
+            }
+
+            var books = await _dbContext.Books.ToListAsync();
+            await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(books), new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30)
+            });
+            return books;
         }
 
-        //public List<Semesters> GetAllSemesters()
+        ////GetBooksPaged
+        //public async Task<List<Book>> GetBooks(int pageNumber, int pageSize)
         //{
-        //    return _dbContext.Semesterss.ToList();
+        //    return await _dbContext.Books
+        //                           .Skip((pageNumber - 1) * pageSize)
+        //                           .Take(pageSize)
+        //                           .ToListAsync();
         //}
 
-        public void CreateBook(BookModel book)
+        public async Task<List<BooksCategory>> GetAllBookCatedgories()
+        {
+            return await _dbContext.BookCategories.ToListAsync();
+        }
+
+        public async Task CreateBook(BookModel book)
         {
             try
             {
-                if (book == null)
+                var bookEntity = new Book
                 {
-                    _logger.LogWarning("Book Details are empty");
-                }
-                else
-                {
-                    var bookEntity = new Book
-                    {
-                        BookId = book.BookId,
-                        BookName = book.BookName,
-                        AuthorName = book.AuthorName,
-                        Publishing = book.Publishing,
-                        Price = book.Price,
-                        Subject = book.Subject,
-                        //Semester = book.SemesterId
-                    };
+                    BookName = book.BookName,
+                    AuthorName = book.AuthorName,
+                    Price = book.Price
+                };
 
-                    _dbContext.Books.Add(bookEntity);
-                    _dbContext.SaveChanges();
-
-                }
+                await _dbContext.Books.AddAsync(bookEntity);
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to add a book data with Exception: {ex.StackTrace}");
+                _logger.LogError($"Failed to add book: {ex.Message}");
                 throw;
             }
         }
 
-        public void CreateBookCategory(BookCategories category)
+        public async Task CreateBookCategory(BookCategories category)
         {
             try
             {
@@ -94,8 +100,8 @@ namespace LibraryManagementSystem.Repository.Repositories
                     Subject = category.Subject,
                 };
 
-                _dbContext.BookCategories.Add(newCategory); // Add the new category
-                _dbContext.SaveChanges();
+                await _dbContext.BookCategories.AddAsync(newCategory); // Add the new category
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -104,4 +110,97 @@ namespace LibraryManagementSystem.Repository.Repositories
             }
         }
     }
+
+
+
+    //public class BookRepository : IBookRepository
+    //{
+    //    private readonly LibraryDbContext DbContext;
+    //    private readonly ILibraryManagementLogger Logger;
+
+    //    public BookRepository(LibraryDbContext dbContext, ILibraryManagementLogger libraryManagementLogger)
+    //    {
+    //        DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    //        Logger = libraryManagementLogger ?? throw new ArgumentNullException(nameof(libraryManagementLogger));
+    //    }
+    //    //public List<Book> GetAllBooks()
+    //    //{
+    //    //    return DbContext.Books.ToList();
+    //    //}
+    //    public async Task<List<Book>> GetAllBooks()
+    //    {
+    //        return await DbContext.Books.ToListAsync();
+    //    }
+
+    //    public async Task<List<BooksCategory>> GetAllBookCatedgories()
+    //    {
+    //        return await DbContext.BookCategories.ToListAsync();
+    //    }
+
+    //    public async Task CreateBook(BookModel book)
+    //    {
+    //        try
+    //        {
+    //            if (book == null)
+    //            {
+    //                Logger.LogWarning("Book Details are empty");
+    //            }
+    //            else
+    //            {
+    //                var bookEntity = new Book
+    //                {
+    //                    BookId = book.BookId,
+    //                    BookName = book.BookName,
+    //                    AuthorName = book.AuthorName,
+    //                    Publishing = book.Publishing,
+    //                    Price = book.Price,
+    //                    Subject = book.Subject,
+    //                };
+
+    //               await DbContext.Books.AddAsync(bookEntity);
+    //               await DbContext.SaveChangesAsync();
+
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Logger.LogError($"Failed to add a book data with Exception: {ex.StackTrace}");
+    //            throw;
+    //        }
+    //    }
+
+    //    public async Task CreateBookCategory(BookCategories category)
+    //    {
+    //        try
+    //        {
+    //            if (category == null)
+    //            {
+    //                Logger.LogWarning("Book Category is empty");
+    //                return;
+    //            }
+
+    //            // Checking that if a category with the same subject already exists or not
+    //            var existingCategory = DbContext.BookCategories.FirstOrDefault(c => c.Subject == category.Subject);
+
+    //            if (existingCategory != null)
+    //            {
+    //                Logger.LogWarning($"A category with the subject '{category.Subject}' already exists.");
+    //                return;
+    //            }
+
+    //            var newCategory = new BooksCategory
+    //            {
+    //                Subject = category.Subject,
+    //            };
+
+    //            await DbContext.BookCategories.AddAsync(newCategory); // Add the new category
+    //            await DbContext.SaveChangesAsync();
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Logger.LogError($"Failed to add a category with Exception: {ex.StackTrace}");
+    //            throw;
+    //        }
+    //    }
+    //}
 }

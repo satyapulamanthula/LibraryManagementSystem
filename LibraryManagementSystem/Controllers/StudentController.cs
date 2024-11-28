@@ -1,21 +1,18 @@
-﻿using LibraryManagementSystem.Repository.IRepositories;
-using LibraryManagementSystem.Services.BussinessServices.IServices;
-using LibraryManagementSystem.Services.BussinessServices.Services;
+﻿using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LibraryManagementSystem.Controllers
 {
     [Authorize]
     public class StudentController : Controller
     {
-        private readonly IStudentService _studentService;
+        private readonly IStudentService StudentService;
 
         public StudentController(IStudentService studentRepository)
         {
-            _studentService = studentRepository;
+            StudentService = studentRepository;
         }
         public IActionResult Index()
         {
@@ -34,7 +31,7 @@ namespace LibraryManagementSystem.Controllers
             {
                 try
                 {
-                    _studentService.CreateStudent(studentEnrolment);
+                    StudentService.CreateStudent(studentEnrolment);
 
                     TempData["SuccessMessage"] = "Student added successfully.";
 
@@ -62,7 +59,7 @@ namespace LibraryManagementSystem.Controllers
 
         public IActionResult ViewStudents()
         {
-            var students = _studentService.GetAllStudents();
+            var students = StudentService.GetAllStudents();
             return View(students);
         }
     }

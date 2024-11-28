@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagementSystem.SharedModels.Models
 {
@@ -15,12 +9,12 @@ namespace LibraryManagementSystem.SharedModels.Models
         [Required(ErrorMessage = " StudentId is required.")]
         public int StudentId { get; set; }
 
-        public string StudentName { get; set; }
+        public string? StudentName { get; set; }
 
         [Required(ErrorMessage = " BookId is required.")]
         public int BookId { get; set; }
 
-        public string BookName { get; set; }
+        public string? BookName { get; set; }
 
         [Required(ErrorMessage = " IssueDate is required.")]
         public DateTime IssueDate { get; set; }

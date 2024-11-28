@@ -1,12 +1,7 @@
-﻿using LibraryManagementSystem.Services.BussinessServices.IServices;
+﻿using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.Repository.IRepositories;
+using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibraryManagementSystem.Data.Entities;
 
 namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
@@ -18,23 +13,23 @@ namespace LibraryManagementSystem.Services.BussinessServices.Services
             _bookRepository = bookRepository;
         }
 
-        public void CreateBook(BookModel book)
+        public async Task CreateBook(BookModel book)
         {
-            _bookRepository.CreateBook(book);
+            await _bookRepository.CreateBook(book);
         }
 
-        public void CreateCategory(BookCategories bookCategories)
+        public async Task CreateCategory(BookCategories bookCategories)
         {
-            _bookRepository.CreateBookCategory(bookCategories);
+            await _bookRepository.CreateBookCategory(bookCategories);
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
-            return _bookRepository.GetAllBooks();
+            return await _bookRepository.GetAllBooks();
         }
-        public IEnumerable<BooksCategory> GetBookCategories()
+        public async Task<IEnumerable<BooksCategory>> GetBookCategories()
         {
-            return _bookRepository.GetAllBookCatedgories();
+            return await _bookRepository.GetAllBookCatedgories();
         }
 
         //public IEnumerable<Semesters> GetSemestersData()

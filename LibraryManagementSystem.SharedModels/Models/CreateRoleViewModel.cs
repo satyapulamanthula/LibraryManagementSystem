@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagementSystem.SharedModels.Models
 {
@@ -12,7 +6,7 @@ namespace LibraryManagementSystem.SharedModels.Models
     {
         [Required]
         [Display(Name = "Role")]
-        public string RoleName { get; set; }
+        public string? RoleName { get; set; }
 
         //public string RoleId { get; set; }
 

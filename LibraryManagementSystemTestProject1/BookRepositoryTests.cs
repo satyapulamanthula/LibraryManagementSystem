@@ -4,12 +4,6 @@ using LibraryManagementSystem.Repository.Repositories;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace LibraryManagementSystem.Repository.Test
 {

@@ -3,9 +3,6 @@ using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
-using System.Collections.Generic;
-using Xunit;
 
 namespace LibraryManagementSystem.Tests.RepositoryTests
 {

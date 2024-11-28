@@ -8,15 +8,15 @@ namespace LibraryManagementSystem.Controllers
     [Authorize(Roles = "Admin")]
     public class CompleteBooksDetailsController : Controller
     {
-        private readonly IIssuedBookService _issuedBookService;
+        private readonly IIssuedBookService IssuedBookService;
 
         public CompleteBooksDetailsController(IIssuedBookService issuedBookService)
         {
-            _issuedBookService = issuedBookService;
+            IssuedBookService = issuedBookService;
         }
         public IActionResult Index()
         {
-            var viewIssuedBooks = _issuedBookService.GetAllIssuedBooks();
+            var viewIssuedBooks = IssuedBookService.GetAllIssuedBooks();
             return View(viewIssuedBooks);
         }
     }

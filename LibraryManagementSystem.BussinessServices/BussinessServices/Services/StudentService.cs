@@ -1,12 +1,6 @@
 ﻿using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
@@ -18,13 +12,13 @@ namespace LibraryManagementSystem.Services.BussinessServices.Services
             _studentRepository = studentRepository;
         }
 
-        public IEnumerable<StudentEnrolmentModel> GetAllStudents()
+        public async Task<IEnumerable<StudentEnrolmentModel>> GetAllStudents()
         {
-            return _studentRepository.GetAllStudents();
+            return await _studentRepository.GetAllStudents();
         }
-        public void CreateStudent(StudentEnrolmentModel student)
+        public async Task CreateStudent(StudentEnrolmentModel student)
         {
-            _studentRepository.CreateStudent(student);
+            await _studentRepository.CreateStudent(student);
         }
     }
 }

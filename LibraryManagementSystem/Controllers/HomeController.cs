@@ -8,13 +8,13 @@ namespace LibraryManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IBookService _bookService;
-        private readonly ILogger<HomeController> _logger;
+        private readonly IBookService BookService;
+        private readonly ILogger<HomeController> Logger;
 
         public HomeController(IBookService bookService,ILogger<HomeController> logger)
         {
-            _bookService = bookService;
-            _logger = logger;
+            BookService = bookService;
+            Logger = logger;
         }
 
         [Authorize]
@@ -35,7 +35,7 @@ namespace LibraryManagementSystem.Controllers
 
         public IActionResult Privacy()
         {
-            var roleData = _bookService.GetAllBooks();
+            var roleData = BookService.GetAllBooks();
             return View(roleData);
         }
 

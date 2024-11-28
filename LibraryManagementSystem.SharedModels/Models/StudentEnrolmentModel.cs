@@ -1,9 +1,4 @@
 ﻿using LibraryManagementSystem.SharedModels.ValidationAttributes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagementSystem.SharedModels.Models
@@ -13,13 +8,13 @@ namespace LibraryManagementSystem.SharedModels.Models
         public int StudentId { get; set; }
 
         [Required(ErrorMessage = "Student Name is required.")]
-        public string StudentName { get; set; }
+        public string? StudentName { get; set; }
 
         [Required(ErrorMessage = "Student Department is required.")]
-        public string Department { get; set; }
+        public string? Department { get; set; }
 
         [Required(ErrorMessage = "Semester is required.")]
-        public string Semester { get; set; }
+        public string? Semester { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
@@ -28,11 +23,11 @@ namespace LibraryManagementSystem.SharedModels.Models
         public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Student Contact number is required.")]
-        public string StudentContact { get; set; }
+        public string? StudentContact { get; set; }
 
         [Required(ErrorMessage = "Student Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
-        public string StudentEmail { get; set; }
+        public string? StudentEmail { get; set; }
 
         [Required(ErrorMessage = "Start date cannot be empty")]
         [DataType(DataType.Date)]

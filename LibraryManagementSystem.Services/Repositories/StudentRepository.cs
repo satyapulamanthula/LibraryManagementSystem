@@ -1,11 +1,7 @@
-﻿using LibraryManagementSystem.SharedModels.Models;
+﻿using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.Repository.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibraryManagementSystem.Data.Entities;
+using LibraryManagementSystem.SharedModels.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementSystem.Repository.Repositories
 {
@@ -21,9 +17,9 @@ namespace LibraryManagementSystem.Repository.Repositories
             _logger = logger;
         }
 
-        public List<StudentEnrolmentModel> GetAllStudents()
+        public async Task<List<StudentEnrolmentModel>> GetAllStudents()
         {
-            List<StudentEnrolmentModel> students = _dbContext.StudentEnrolments
+            var students = await _dbContext.StudentEnrolments
                 .Select(se => new StudentEnrolmentModel
                 {
                     StudentId = se.StudentId,
@@ -36,12 +32,12 @@ namespace LibraryManagementSystem.Repository.Repositories
                     StartDate = se.StartDate,
                     EndDate = se.EndDate,
                     IsActive = se.IsActive
-                }).ToList();
+                }).ToListAsync();
 
             return students;
         }
 
-        public void CreateStudent(StudentEnrolmentModel student)
+        public async Task CreateStudent(StudentEnrolmentModel student)
         {
             try
             {
@@ -52,8 +48,8 @@ namespace LibraryManagementSystem.Repository.Repositories
                 }
 
                 // Checking that student with the same ID or email already exists or not
-                var existingStudent = _dbContext.StudentEnrolments.FirstOrDefault(s => s.StudentId == student.StudentId || s.StudentEmail == student.StudentEmail);
-                if (existingStudent != null)
+                bool studentExists = await _dbContext.StudentEnrolments.AnyAsync(s => s.StudentId == student.StudentId || s.StudentEmail == student.StudentEmail);
+                if (studentExists != null)
                 {
                     _logger.LogWarning($"Student with ID {student.StudentId} or email {student.StudentEmail} already exists");
                     throw new Exception("Student with the same ID or email already exists");
@@ -72,8 +68,8 @@ namespace LibraryManagementSystem.Repository.Repositories
                     EndDate = student.EndDate
                 };
 
-                _dbContext.StudentEnrolments.Add(studentEntity);
-                _dbContext.SaveChanges();
+                await _dbContext.StudentEnrolments.AddAsync(studentEntity);
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

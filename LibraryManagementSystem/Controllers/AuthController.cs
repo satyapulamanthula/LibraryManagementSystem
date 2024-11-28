@@ -1,25 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LibraryManagementSystem.SharedModels.Models;
+﻿using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
-using LibraryManagementSystem.Repository.IRepositories;
+using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using LibraryManagementSystem.Data.Entities;
 
 public class AuthController : Controller
 {
-    private readonly IAuthenticationService _authenticationService;
-    private ILibraryManagementLogger _logger;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IAuthenticationService AuthenticationService;
+    private ILibraryManagementLogger Logger;
+    private readonly RoleManager<IdentityRole> RoleManager;
 
 
     public AuthController(IAuthenticationService authenticationService, ILibraryManagementLogger libraryManagementLogger, RoleManager<IdentityRole> roleManager)
     {
-        _authenticationService = authenticationService;
-        _logger = libraryManagementLogger;
-        _roleManager = roleManager;
+        AuthenticationService = authenticationService;
+        Logger = libraryManagementLogger;
+        RoleManager = roleManager;
     }
 
     public IActionResult Login()
@@ -58,7 +55,7 @@ public class AuthController : Controller
         if (ModelState.IsValid)
         {
             // Get the Result like Email,Password
-            var result = await _authenticationService.SignInAsync(model.Email, model.Password, model.RememberMe);
+            var result = await AuthenticationService.SignInAsync(model.Email, model.Password, model.RememberMe);
 
             if (result.Succeeded)
             {
@@ -66,7 +63,7 @@ public class AuthController : Controller
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt");
-            _logger.LogError("Email Or Password are not valid");
+            Logger.LogError("Email Or Password are not valid");
         }
 
         // If the login attempt is unsuccessful, add an error message to inform the user
@@ -82,7 +79,7 @@ public class AuthController : Controller
         if (ModelState.IsValid)
         {
             // Check if a user with the provided email already exists
-            var existingUser = await _authenticationService.FindByEmailAsync(model.Email);
+            var existingUser = await AuthenticationService.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
                 // Display a warning message
@@ -91,16 +88,16 @@ public class AuthController : Controller
             }
 
             // Proceed with user registration if the email is not already in use
-            var result = await _authenticationService.RegisterAsync(model.Email, model.Password);
+            var result = await AuthenticationService.RegisterAsync(model.Email, model.Password);
 
             if (result.Succeeded)
             {
                 // Get the user
-                var user = await _authenticationService.FindByEmailAsync(model.Email);
+                var user = await AuthenticationService.FindByEmailAsync(model.Email);
 
                 // If no role is specified, assign a default role (e.g., "Student")
                 var defaultRole = "Student";
-                var addToRoleResult = await _authenticationService.AssignRoleAsync(user.Id, defaultRole);
+                var addToRoleResult = await AuthenticationService.AssignRoleAsync(user.Id, defaultRole);
 
                 if (!addToRoleResult.Succeeded)
                 {
@@ -111,7 +108,7 @@ public class AuthController : Controller
                     }
 
                     // Rollback user creation if role assignment fails
-                    await _authenticationService.DeleteUserAsync(user);
+                    await AuthenticationService.DeleteUserAsync(user);
                     return View("Register", model);
                 }
 
@@ -133,7 +130,7 @@ public class AuthController : Controller
 
     public async Task<IActionResult> Logout()
     {
-        await _authenticationService.SignOutAsync();
+        await AuthenticationService.SignOutAsync();
 
         return RedirectToAction("Login", "Auth");
     }
@@ -151,7 +148,7 @@ public class AuthController : Controller
     {
         if (ModelState.IsValid)
         {
-            var success = await _authenticationService.CreateRole(roleModel?.RoleName);
+            var success = await AuthenticationService.CreateRole(roleModel?.RoleName);
             if (success)
             {
                 return RedirectToAction("ListRols", "Auth");
@@ -168,14 +165,14 @@ public class AuthController : Controller
     [HttpGet]
     public async Task<IActionResult> ListRoles()
     {
-        List<IdentityRole> roles = await _authenticationService.GetAllRoles();
+        List<IdentityRole> roles = await AuthenticationService.GetAllRoles();
         return View(roles);
     }
 
     [HttpGet]
     public async Task<IActionResult> EditRole(string roleId)
     {
-        var model = await _authenticationService.GetRoleWithUsers(roleId);
+        var model = await AuthenticationService.GetRoleWithUsers(roleId);
         if (model == null)
         {
             return View("Error");
@@ -189,7 +186,7 @@ public class AuthController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _authenticationService.UpdateRole(model.Id, model.RoleName);
+            var result = await AuthenticationService.UpdateRole(model.Id, model.RoleName);
             if (result.Succeeded)
             {
                 return RedirectToAction("ListRoles");
@@ -207,7 +204,7 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteRole(string roleId)
     {
-        var result = await _authenticationService.DeleteRole(roleId);
+        var result = await AuthenticationService.DeleteRole(roleId);
         if (result.Succeeded)
         {
             return RedirectToAction("ListRoles");
@@ -220,13 +217,13 @@ public class AuthController : Controller
         }
 
         // Return to the view with errors
-        return View("ListRoles", await _roleManager.Roles.ToListAsync());
+        return View("ListRoles", await RoleManager.Roles.ToListAsync());
     }
 
     [HttpGet]
     public async Task<IActionResult> EditUsersInRole(string roleId)
     {
-        var model = await _authenticationService.GetUsersInRole(roleId);
+        var model = await AuthenticationService.GetUsersInRole(roleId);
         if (model == null)
         {
             ViewBag.ErrorMessage = $"Role with Id = {roleId} cannot be found";
@@ -234,7 +231,7 @@ public class AuthController : Controller
         }
 
         ViewBag.roleId = roleId;
-        var role = await _roleManager.FindByIdAsync(roleId);
+        var role = await RoleManager.FindByIdAsync(roleId);
         ViewBag.RollName = role.Name;
 
         return View(model);
@@ -243,7 +240,7 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
     {
-        var success = await _authenticationService.EditUsersInRole(model, roleId);
+        var success = await AuthenticationService.EditUsersInRole(model, roleId);
         if (success)
         {
             return RedirectToAction("EditRole", new { roleId = roleId });
@@ -261,7 +258,7 @@ public class AuthController : Controller
     [HttpGet]
     public async Task<IActionResult> ListUsers()
     {
-        var users = await _authenticationService.GetAllUsers();
+        var users = await AuthenticationService.GetAllUsers();
         return View(users);
     }
 
@@ -269,7 +266,7 @@ public class AuthController : Controller
     [HttpGet]
     public async Task<IActionResult> EditUser(string userId)
     {
-        var user = await _authenticationService.GetUserById(userId);
+        var user = await AuthenticationService.GetUserById(userId);
 
         if (user == null)
         {
@@ -284,8 +281,8 @@ public class AuthController : Controller
             UserName = user.UserName,
             //FirstName = user.FirstName,
             //LastName = user.LastName,
-            Claims = await _authenticationService.GetUserClaims(user),
-            Roles = await _authenticationService.GetUserRoles(user)
+            Claims = await AuthenticationService.GetUserClaims(user),
+            Roles = await AuthenticationService.GetUserRoles(user)
         };
 
         return View(model);
@@ -294,7 +291,7 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> EditUser(EditUserViewModel model)
     {
-        var user = await _authenticationService.GetUserById(model.Id);
+        var user = await AuthenticationService.GetUserById(model.Id);
 
         if (user == null)
         {
@@ -306,7 +303,7 @@ public class AuthController : Controller
             user.Email = model.Email;
             user.UserName = model.UserName;
 
-            bool result = await _authenticationService.UpdateUser(user);
+            bool result = await AuthenticationService.UpdateUser(user);
 
             if (result)
             {
@@ -326,7 +323,7 @@ public class AuthController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteUser(string userId)
     {
-        bool isDeleted = await _authenticationService.DeleteUser(userId);
+        bool isDeleted = await AuthenticationService.DeleteUser(userId);
 
         if (isDeleted)
         {
