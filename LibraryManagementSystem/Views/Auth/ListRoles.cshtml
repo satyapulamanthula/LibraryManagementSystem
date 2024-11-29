@@ -5,6 +5,14 @@
     ViewBag.Title = "All Roles";
 }
 
+<!-- Success Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <div class="container">
     <h1>All Roles</h1>
 
@@ -80,5 +88,20 @@
             $('#' + deleteSpan).show();
             $('#' + confirmDeleteSpan).hide();
         }
+    }
+    // Check if successMessage exists
+    const successMessage = document.getElementById('successMessage');
+    if (successMessage) {
+        // Display the success message
+        successMessage.style.display = 'block';
+
+        // Wait for 5 seconds, then close the message and redirect
+        setTimeout(() => {
+            // Hide the success message
+            successMessage.style.display = 'none';
+
+            // Redirect after 5 seconds
+            window.location.href = '@Url.Action("ListRoles", "Auth")';
+        }, 5000);
     }
 </script>

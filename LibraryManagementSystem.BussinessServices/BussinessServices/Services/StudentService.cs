@@ -6,19 +6,19 @@ namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
     public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IStudentRepository StudentRepository;
         public StudentService(IStudentRepository studentRepository)
         {
-            _studentRepository = studentRepository;
+            StudentRepository = studentRepository;
         }
 
         public async Task<IEnumerable<StudentEnrolmentModel>> GetAllStudents()
         {
-            return await _studentRepository.GetAllStudents();
+            return await StudentRepository.GetAllStudents();
         }
         public async Task CreateStudent(StudentEnrolmentModel student)
         {
-            await _studentRepository.CreateStudent(student);
+            await StudentRepository.CreateStudent(student);
         }
     }
 }

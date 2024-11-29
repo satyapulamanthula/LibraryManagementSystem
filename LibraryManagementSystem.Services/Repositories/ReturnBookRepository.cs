@@ -6,21 +6,21 @@ namespace LibraryManagementSystem.Repository.Repositories
 {
     public class ReturnBookRepository : IReturnBookRepository
     {
-        private readonly LibraryDbContext _dbContext;
-        private readonly ILibraryManagementLogger _logger;
+        private readonly LibraryDbContext DbContext;
+        private readonly ILibraryManagementLogger Logger;
 
         public ReturnBookRepository(LibraryDbContext dbContext, ILibraryManagementLogger libraryManagementLogger)
         {
-            _dbContext = dbContext;
-            _logger = libraryManagementLogger;
+            DbContext = dbContext;
+            Logger = libraryManagementLogger;
         }
 
         public async Task<List<IssuedModel>> GetAllIssuedBooks(int studentId, bool isReturn, bool isFinePaid)
         {
             ////// Ignoreit For my reference.
-            ////var issuedBooksForStudent = (from i in _dbContext.Issued
-            ////                             join se in _dbContext.StudentEnrolments on i.StudentId equals se.StudentId
-            ////                             join b in _dbContext.Books on i.BookId equals b.BookId
+            ////var issuedBooksForStudent = (from i in DbContext.Issued
+            ////                             join se in DbContext.StudentEnrolments on i.StudentId equals se.StudentId
+            ////                             join b in DbContext.Books on i.BookId equals b.BookId
             ////                             where i.StudentId == studentId && i.IsReturn == false
             ////                             select new IssuedModel
             ////                             {
@@ -33,7 +33,7 @@ namespace LibraryManagementSystem.Repository.Repositories
             ////                                 IsReturn = i.IsReturn
             ////                             }).ToList();
 
-            var issuedBooksForStudent = await _dbContext.Issued
+            var issuedBooksForStudent = await DbContext.Issued
                 .Include(x => x.Student)
                 .Include(x => x.Book)
                 .Where(i => i.StudentId == studentId && i.IsReturn == isReturn && i.IsFinePaid == isFinePaid)
@@ -57,7 +57,7 @@ namespace LibraryManagementSystem.Repository.Repositories
             //try
             //{
             //    // Directly query IssuedModel using raw SQL
-            //    var issuedBooks = await _dbContext.Set<IssuedModel>()
+            //    var issuedBooks = await DbContext.Set<IssuedModel>()
             //        .FromSqlInterpolated($@"
             //    EXEC GetAllIssuedBooks 
             //    @StudentId = {studentId}, 
@@ -69,7 +69,7 @@ namespace LibraryManagementSystem.Repository.Repositories
             //}
             //catch (Exception ex)
             //{
-            //    _logger.LogError($"Error while fetching issued books: {ex.Message}");
+            //    Logger.LogError($"Error while fetching issued books: {ex.Message}");
             //    throw;
             //}
         }
@@ -78,7 +78,7 @@ namespace LibraryManagementSystem.Repository.Repositories
         {
             foreach (var issuedBookId in issuedBookIds)
             {
-                var issueToUpdate = await _dbContext.Issued.SingleOrDefaultAsync(issue => issue.IssueId == issuedBookId);
+                var issueToUpdate = await DbContext.Issued.SingleOrDefaultAsync(issue => issue.IssueId == issuedBookId);
 
                 if (issueToUpdate != null)
                 {
@@ -104,7 +104,7 @@ namespace LibraryManagementSystem.Repository.Repositories
                     }
                 }
             }
-            await _dbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync();
         }
 
 
@@ -113,7 +113,7 @@ namespace LibraryManagementSystem.Repository.Repositories
         //{
         //    foreach (var issuedBookId in issuedBookIds)
         //    {
-        //        var issueToUpdate = _dbContext.Issued.SingleOrDefault(issue => issue.IssueId == issuedBookId);
+        //        var issueToUpdate = DbContext.Issued.SingleOrDefault(issue => issue.IssueId == issuedBookId);
 
         //        if (issueToUpdate != null)
         //        {
@@ -146,25 +146,25 @@ namespace LibraryManagementSystem.Repository.Repositories
         //        }
         //    }
 
-        //    _dbContext.SaveChanges();
+        //    DbContext.SaveChanges();
         //}
 
         public async Task UpdatingFine(List<int> issuedBookIds)
         {
             foreach(var issuedBookId in issuedBookIds)
             {
-                var fineToUpdate = await _dbContext.Issued.SingleOrDefaultAsync(issue => issue.IssueId == issuedBookId);
+                var fineToUpdate = await DbContext.Issued.SingleOrDefaultAsync(issue => issue.IssueId == issuedBookId);
                 if(fineToUpdate != null)
                 {
                     fineToUpdate.IsFinePaid = true;
                 }
-                await _dbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
             }
         } 
 
         //public List<Issued> GetAllIssuedBooks()
         //{
-        //    return _dbContext.Issued.ToList();
+        //    return DbContext.Issued.ToList();
         //}
     }
 }

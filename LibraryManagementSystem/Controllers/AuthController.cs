@@ -151,7 +151,8 @@ public class AuthController : Controller
             var success = await AuthenticationService.CreateRole(roleModel?.RoleName);
             if (success)
             {
-                return RedirectToAction("ListRols", "Auth");
+                TempData["SuccessMessage"] = $"{roleModel.RoleName} role created successfully!";
+                return RedirectToAction("ListRoles");
             }
             else
             {

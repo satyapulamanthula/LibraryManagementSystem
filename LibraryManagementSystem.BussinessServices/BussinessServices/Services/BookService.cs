@@ -7,34 +7,34 @@ namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly IBookRepository BookRepository;
         public BookService(IBookRepository bookRepository)
         {
-            _bookRepository = bookRepository;
+            BookRepository = bookRepository;
         }
 
         public async Task CreateBook(BookModel book)
         {
-            await _bookRepository.CreateBook(book);
+            await BookRepository.CreateBook(book);
         }
 
         public async Task CreateCategory(BookCategories bookCategories)
         {
-            await _bookRepository.CreateBookCategory(bookCategories);
+            await BookRepository.CreateBookCategory(bookCategories);
         }
 
         public async Task<IEnumerable<Book>> GetAllBooks()
         {
-            return await _bookRepository.GetAllBooks();
+            return await BookRepository.GetAllBooks();
         }
         public async Task<IEnumerable<BooksCategory>> GetBookCategories()
         {
-            return await _bookRepository.GetAllBookCatedgories();
+            return await BookRepository.GetAllBookCatedgories();
         }
 
         //public IEnumerable<Semesters> GetSemestersData()
         //{
-        //    return _bookRepository.GetAllSemesters();
+        //    return BookRepository.GetAllSemesters();
         //}
     }
 }

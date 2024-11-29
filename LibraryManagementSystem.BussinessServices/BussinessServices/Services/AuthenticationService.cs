@@ -7,106 +7,106 @@ namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IAuthenticationRepository _authenticationRepository;
+        private readonly IAuthenticationRepository AuthenticationRepository;
 
         public AuthenticationService(IAuthenticationRepository authenticationRepository)
         {
-            _authenticationRepository = authenticationRepository;
+            AuthenticationRepository = authenticationRepository;
         }
 
         public async Task<SignInResult> SignInAsync(string email, string password, bool rememberMe)
         {
-            return await _authenticationRepository.SignInAsync(email, password, rememberMe);
+            return await AuthenticationRepository.SignInAsync(email, password, rememberMe);
         }
 
         public async Task<IdentityResult> RegisterAsync(string email, string password)
         {
-            return await _authenticationRepository.RegisterAsync(email, password);
+            return await AuthenticationRepository.RegisterAsync(email, password);
         }
 
         public async Task<IdentityResult> AssignRoleAsync(string userId, string role)
         {
-            return await _authenticationRepository.AssignRoleAsync(userId, role);
+            return await AuthenticationRepository.AssignRoleAsync(userId, role);
         }
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            return await _authenticationRepository.FindByEmailAsync(email);
+            return await AuthenticationRepository.FindByEmailAsync(email);
         }
 
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
-            return await _authenticationRepository.DeleteUserAsync(user);
+            return await AuthenticationRepository.DeleteUserAsync(user);
         }
 
         public async Task SignOutAsync()
         {
-            await _authenticationRepository.SignOutAsync();
+            await AuthenticationRepository.SignOutAsync();
         }
 
         public async Task<bool> CreateRole(string roleName)
         {
-            return await _authenticationRepository.CreateRoleAsync(roleName);
+            return await AuthenticationRepository.CreateRoleAsync(roleName);
         }
 
         public async Task<List<IdentityRole>> GetAllRoles()
         {
-            return await _authenticationRepository.GetAllRolesAsync();
+            return await AuthenticationRepository.GetAllRolesAsync();
         }
 
         public async Task<EditRoleViewModel> GetRoleWithUsers(string roleId)
         {
-            return await _authenticationRepository.GetRoleWithUsers(roleId);
+            return await AuthenticationRepository.GetRoleWithUsers(roleId);
         }
 
 
         public async Task<IdentityResult> UpdateRole(string roleId, string roleName)
         {
-            return await _authenticationRepository.UpdateRoleAsync(roleId, roleName);
+            return await AuthenticationRepository.UpdateRoleAsync(roleId, roleName);
         }
 
         public async Task<IdentityResult> DeleteRole(string roleId)
         {
-            return await _authenticationRepository.DeleteRoleAsync(roleId);
+            return await AuthenticationRepository.DeleteRoleAsync(roleId);
         }
 
         public async Task<List<UserRoleViewModel>> GetUsersInRole(string roleId)
         {
-            return await _authenticationRepository.GetUsersInRoleAsync(roleId);
+            return await AuthenticationRepository.GetUsersInRoleAsync(roleId);
         }
 
         public async Task<bool> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
         {
-            return await _authenticationRepository.EditUsersInRoleAsync(model, roleId);
+            return await AuthenticationRepository.EditUsersInRoleAsync(model, roleId);
         }
 
         //Users
         public async Task<List<ApplicationUser>> GetAllUsers()
         {
-            return await _authenticationRepository.GetUsersAsync();
+            return await AuthenticationRepository.GetUsersAsync();
         }
         public async Task<ApplicationUser> GetUserById(string userId)
         {
-            return await _authenticationRepository.GetUserByIdAsync(userId);
+            return await AuthenticationRepository.GetUserByIdAsync(userId);
         }
 
         public async Task<List<string>> GetUserClaims(ApplicationUser user)
         {
-            return await _authenticationRepository.GetUserClaimsAsync(user);
+            return await AuthenticationRepository.GetUserClaimsAsync(user);
         }
         public async Task<IList<string>> GetUserRoles(ApplicationUser user)
         {
-            return await _authenticationRepository.GetUserRolesAsync(user);
+            return await AuthenticationRepository.GetUserRolesAsync(user);
         }
 
         public async Task<bool> DeleteUser(string userId)
         {
-            return await _authenticationRepository.DeleteUserAsync(userId);
+            return await AuthenticationRepository.DeleteUserAsync(userId);
         }
 
         public async Task<bool> UpdateUser(ApplicationUser user)
         {
-            return await _authenticationRepository.UpdateUserAsync(user);
+            return await AuthenticationRepository.UpdateUserAsync(user);
         }
     }
 }
