@@ -15,7 +15,7 @@
         }, 10000);
     </script>
 }*@
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+@*@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
 {
     <div id="successAlert" class="alert alert-success" style="width:600px;margin-left:800px;">
         @TempData["SuccessMessage"]
@@ -26,7 +26,11 @@
             $("#successAlert").alert('close');
         }, 10000);
     </script>
-}
+}*@
+
+<!-- Include the message partial view -->
+@Html.Partial("_MessagePartial")
+
 
 <div class="container" style="height:auto;">
     <div class="row justify-content-center">
@@ -71,6 +75,17 @@
                     <div class="invalid-feedback">Please select a category.</div>
                     <div class="valid-feedback">Looks good!</div>
                 </div>
+
+                @*This is for the Semeste DropDown*@
+                @*<div class="form-group col-md-5 mb-3">
+                    <label asp-for="Semester">Semester</label>
+                    <select asp-for="Semester" class="form-control" id="SelecteSemester" required>
+                        <option value="">Select a category</option>
+                        <!-- Options will be dynamically added here -->
+                    </select>
+                    <div class="invalid-feedback">Please select a Sem.</div>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>*@
 
                 <div class="form-group col-12">
                     <button type="button" class="btn btn-primary" data-toggle="modal" onclick="validateAndShowModal()">Save</button>
@@ -130,9 +145,38 @@
                     });
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    console.log('Error:', errorThrown);
+                    //console.log('Error:', errorThrown);
                 }
             });
+            GetAllSemestersData
+
+            ////For Semester DropDown
+            //$.ajax({
+            //    url: '/Books/GetAllSemestersData',
+            //    type: 'GET',
+            //    dataType: 'json',
+            //    success: function (data) {
+            //        // Clear previous options
+            //        $('#SelecteSemester').empty();
+
+            //        // Add default option
+            //        $('#SelecteSemester').append($('<option>', {
+            //            value: '',
+            //            text: 'Select a Semester'
+            //        }));
+
+            //        // Add options based on fetched data
+            //        $.each(data, function (index, Sem) {
+            //            $('#SelecteSemester').append($('<option>', {
+            //                value: Sem.semesterId,
+            //                text: Sem.semesterName
+            //            }));
+            //        });
+            //    },
+            //    error: function (xhr, textStatus, errorThrown) {
+            //        console.log('Error:', errorThrown);
+            //    }
+            //});
         });
 
         function validateAndShowModal() {
@@ -150,7 +194,7 @@
 
         function saveChanges() {
             debugger;
-            // Implement your logic to save changes or submit the form
+            //logic to save changes or submit the form
             document.getElementById("AddBook").submit();
             //alert("Book details are saved");
             closeModal();            
@@ -183,7 +227,7 @@
                     populateSelectRateBookTypes(RateBookTypesData);
                 },
                 error: function (error) {
-                    console.error("Error fetching parent suppliers:", error);
+                    //console.error("Error fetching parent suppliers:", error);
                 }
             });
         }

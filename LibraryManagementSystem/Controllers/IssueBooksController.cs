@@ -1,8 +1,5 @@
 ﻿using LibraryManagementSystem.Data.Entities;
-using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
-using LibraryManagementSystem.Services.BussinessServices.Services;
-using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +8,11 @@ namespace LibraryManagementSystem.Controllers
     [Authorize]
     public class IssueBooksController : Controller
     {
-        private readonly IIssuedBookService _issuedBookService;
+        private readonly IIssuedBookService IssuedBookService;
 
         public IssueBooksController(IIssuedBookService issuedBookService)
         {
-            _issuedBookService = issuedBookService;
+            IssuedBookService = issuedBookService;
         }
         public IActionResult Index()
         {
@@ -29,7 +26,7 @@ namespace LibraryManagementSystem.Controllers
             if (issued.BookId != 0 && issued.StudentId != 0)
             {
                 // Call the service method to issue the book
-                bool isSuccess = _issuedBookService.IssuedBook(issued);
+                bool isSuccess = IssuedBookService.IssuedBook(issued);
 
                 // Check if the book issuance was successful
                 if (!isSuccess)
@@ -51,19 +48,19 @@ namespace LibraryManagementSystem.Controllers
 
         public IActionResult ViewIssuedBooks()
         {
-            var viewIssuedBooks = _issuedBookService.GetAllIssuedBooks();
+            var viewIssuedBooks = IssuedBookService.GetAllIssuedBooks();
             return View(viewIssuedBooks);
         }
 
         public IActionResult GetStudentDetails()
         {
-            var studentDetails = _issuedBookService.GetAllStudentsDetails();
+            var studentDetails = IssuedBookService.GetAllStudentsDetails();
             return Json(studentDetails);
         }
 
         public IActionResult GetBookDetails()
         {
-            var bookDetails = _issuedBookService.GetAllBooksDetails();
+            var bookDetails = IssuedBookService.GetAllBooksDetails();
             return Json(bookDetails);
         }
 

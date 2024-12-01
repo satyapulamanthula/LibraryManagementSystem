@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using LibraryManagementSystem.Data.Entities;
-using LibraryManagementSystem.Data;
+using Microsoft.EntityFrameworkCore;
 
 public class LibraryDbContext : IdentityDbContext<ApplicationUser> /*IdentityDbContext<ApplicationUser, AspNetRoles, string>*/
 {
@@ -18,21 +11,23 @@ public class LibraryDbContext : IdentityDbContext<ApplicationUser> /*IdentityDbC
     public DbSet<BooksCategory> BookCategories { get; set; }
     public DbSet<Issued> Issued { get; set; }
 
+
     //public DbSet<AspNetUsers> AspNetUsers { get; set; }
     //public DbSet<AspNetRoles> AspNetRoles { get; set; }
     //public DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
 
-    public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options)
-    {
-    }
+    public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options){}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Other configurations...
 
+        // Configure Book entity
         modelBuilder.Entity<Book>()
             .Property(b => b.Price)
             .HasColumnType("decimal(18, 2)");
+
+        // Configure IssuedModel as a keyless entity
+        modelBuilder.Entity<IssuedModel>().HasNoKey();
 
         //modelBuilder.Entity<AspNetUserRoles>().HasNoKey();
 

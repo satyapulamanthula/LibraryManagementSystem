@@ -16,7 +16,7 @@
         }, 8000);
     </script>
 }
-@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+@*@if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
 {
     <div id="successAlert" class="alert alert-success" style="width:600px;margin-left:800px;">
         @TempData["SuccessMessage"]
@@ -27,7 +27,8 @@
             $("#successAlert").alert('close');
         }, 8000);
     </script>
-}
+}*@
+@Html.Partial("_MessagePartial")
 
 @*<h2>Issue Book</h2>
 <hr />*@
@@ -104,7 +105,7 @@
                     setBookId();
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    console.log('Error:', errorThrown);
+                    //console.log('Error:', errorThrown);
                 }
             });
 
@@ -134,7 +135,7 @@
                     setBookId();
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    console.log('Error:', errorThrown);
+                    //console.log('Error:', errorThrown);
                 }
             });
 

@@ -1,9 +1,6 @@
 ﻿using LibraryManagementSystem.Services.BussinessServices.IServices;
-using LibraryManagementSystem.SharedModels.Models;
-using Microsoft.AspNetCore.Mvc;
-using LibraryManagementSystem.Repository.IRepositories;
-using LibraryManagementSystem.Services.BussinessServices.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -11,11 +8,11 @@ namespace LibraryManagementSystem.Controllers
     [Authorize]
     public class ReturnBooksController : Controller
     {
-        private readonly IReturnBookService _returnBookService;
+        private readonly IReturnBookService ReturnBookService;
 
         public ReturnBooksController(IReturnBookService returnBookService)
         {
-            _returnBookService = returnBookService;
+            ReturnBookService = returnBookService;
         }
 
         public IActionResult Index()
@@ -36,7 +33,7 @@ namespace LibraryManagementSystem.Controllers
         [HttpGet]
         public IActionResult GetStudentDetails(int studentId,bool isReturn, bool isFinePaid)
         {
-            var studentDetails = _returnBookService.GetAllIssuedBooksToStudent(studentId, isReturn, isFinePaid);
+            var studentDetails = ReturnBookService.GetAllIssuedBooksToStudent(studentId, isReturn, isFinePaid);
 
             return Json(studentDetails);
         }
@@ -44,7 +41,7 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost]
         public IActionResult MarkBooksReturned(List<int> issuedBookIds, int studentId,bool isReturn, bool isFinePaid)
         {
-            var updatingBook = _returnBookService.UpdateIssuedBook(issuedBookIds, studentId,isReturn, isFinePaid);
+            var updatingBook = ReturnBookService.UpdateIssuedBook(issuedBookIds, studentId,isReturn, isFinePaid);
 
             return Json(new { success = true, message = "Books marked as returned successfully." });
         }
@@ -52,7 +49,7 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost]
         public IActionResult MarkFineReturn(List<int> issuedBookIds, int studentId, bool isReturn, bool isFinePaid)
         {
-            var updatingBook = _returnBookService.UpdateFine(issuedBookIds, studentId, isReturn, isFinePaid);
+            var updatingBook = ReturnBookService.UpdateFine(issuedBookIds, studentId, isReturn, isFinePaid);
 
             return Json(new { success = true, message = "Books marked as returned successfully." });
         }

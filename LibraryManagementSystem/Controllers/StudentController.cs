@@ -1,6 +1,4 @@
-﻿using LibraryManagementSystem.Repository.IRepositories;
-using LibraryManagementSystem.Services.BussinessServices.IServices;
-using LibraryManagementSystem.Services.BussinessServices.Services;
+﻿using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +8,11 @@ namespace LibraryManagementSystem.Controllers
     [Authorize]
     public class StudentController : Controller
     {
-        private readonly IStudentService _studentRepository;
+        private readonly IStudentService StudentService;
 
         public StudentController(IStudentService studentRepository)
         {
-            _studentRepository = studentRepository;
+            StudentService = studentRepository;
         }
         public IActionResult Index()
         {
@@ -23,7 +21,6 @@ namespace LibraryManagementSystem.Controllers
 
         public IActionResult AddStudent()
         {
-            // Your logic for adding new books
             return View();
         }
 
@@ -34,7 +31,7 @@ namespace LibraryManagementSystem.Controllers
             {
                 try
                 {
-                    _studentRepository.CreateStudent(studentEnrolment);
+                    StudentService.CreateStudent(studentEnrolment);
 
                     TempData["SuccessMessage"] = "Student added successfully.";
 
@@ -60,35 +57,9 @@ namespace LibraryManagementSystem.Controllers
             }
         }
 
-
-
-
-        //// POST
-        //[HttpPost]
-        //public IActionResult AddStudent(StudentEnrolmentModel studentEnrolment)
-        //{
-        //    if (ModelState.IsValid /*&& studentEnrolment != null*/)
-        //    {
-        //            _studentRepository.CreateStudent(studentEnrolment);
-
-        //            //// Set success message
-        //            //ViewBag.SuccessMessage = "Student added successfully.";
-
-        //            // Set success message in TempData
-        //            TempData["SuccessMessage"] = "Book added successfully.";
-
-        //            return RedirectToAction("AddStudent");
-
-        //    }
-        //    else
-        //    {
-        //        return View(studentEnrolment);
-        //    }
-        //}
-
         public IActionResult ViewStudents()
         {
-            var students = _studentRepository.GetAllStudents();
+            var students = StudentService.GetAllStudents();
             return View(students);
         }
     }

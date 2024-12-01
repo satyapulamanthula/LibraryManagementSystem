@@ -5,9 +5,9 @@ namespace LibraryManagementSystem.Repository.IRepositories
 {
     public interface IBookRepository
     {
-        List<Book> GetAllBooks();
-        List<BooksCategory> GetAllBookCatedgories();
-        void CreateBook(BookModel book);
-        void CreateBookCategory(BookCategories bookCategories);
+        Task<List<Book>> GetAllBooks();
+        Task<List<BooksCategory>> GetAllBookCatedgories(); 
+        Task CreateBook(BookModel book);
+        Task CreateBookCategory(BookCategories bookCategories);
     }
 }

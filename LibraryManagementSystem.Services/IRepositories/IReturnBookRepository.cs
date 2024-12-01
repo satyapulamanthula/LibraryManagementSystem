@@ -4,9 +4,9 @@ namespace LibraryManagementSystem.Repository.IRepositories
 {
     public interface IReturnBookRepository
     {
-        List<IssuedModel> GetAllIssuedBooks(int studentId, bool isReturn, bool isFinePaid);
+        Task <List<IssuedModel>> GetAllIssuedBooks(int studentId, bool isReturn, bool isFinePaid);
 
-        void UpdatingBook(List<int> issuedBookIds);
-        void UpdatingFine(List<int> issuedBookIds);
+        Task UpdatingBook(List<int> issuedBookIds);
+        Task UpdatingFine(List<int> issuedBookIds);
     }
 }

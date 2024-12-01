@@ -1,11 +1,5 @@
-﻿using LibraryManagementSystem.SharedModels.Models;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibraryManagementSystem.Data.Static;
+﻿using LibraryManagementSystem.Data.Static;
+using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;

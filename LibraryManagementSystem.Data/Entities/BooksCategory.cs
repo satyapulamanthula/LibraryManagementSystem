@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LibraryManagementSystem.Data.Entities
 {
@@ -12,7 +7,7 @@ namespace LibraryManagementSystem.Data.Entities
         [Key]
         public int BookCategoryId { get; set; }
 
-        public string Subject { get; set; }
+        public string? Subject { get; set; }
 
         ////public string CategoryName { get; set; }
         //public string Description { get; set; }

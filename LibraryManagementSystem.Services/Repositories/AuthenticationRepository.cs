@@ -1,34 +1,28 @@
-﻿using LibraryManagementSystem.Data.Entities;
-using LibraryManagementSystem.Repository.IRepositories;
+﻿using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Repository.Repositories
 {
     public class AuthenticationRepository : IAuthenticationRepository
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> UserManager;
+        private readonly SignInManager<ApplicationUser> SignInManager;
+        private readonly RoleManager<IdentityRole> RoleManager;
 
         public AuthenticationRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)  // Add roleManager as a parameter
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
+            UserManager = userManager;
+            SignInManager = signInManager;
+            RoleManager = roleManager;
         }
 
         public async Task<SignInResult> SignInAsync(string email, string password, bool rememberMe)
         {
             // Implement your custom logic if needed
-            return await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+            return await SignInManager.PasswordSignInAsync(email, password, rememberMe, false);
         }
 
         public async Task<IdentityResult> RegisterAsync(string email, string password)
@@ -40,13 +34,13 @@ namespace LibraryManagementSystem.Repository.Repositories
             };
 
             // Implement your custom logic if needed
-            return await _userManager.CreateAsync(user, password);
+            return await UserManager.CreateAsync(user, password);
         }
 
         public async Task<IdentityResult> AssignRoleAsync(string userId, string role)
         {
             // Get the user
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await UserManager.FindByIdAsync(userId);
 
             // Check if the user exists
             if (user == null)
@@ -56,10 +50,10 @@ namespace LibraryManagementSystem.Repository.Repositories
             }
 
             // Check if the role exists using RoleManager
-            if (!await _roleManager.RoleExistsAsync(role))
+            if (!await RoleManager.RoleExistsAsync(role))
             {
                 // If the role doesn't exist, create it
-                var createRoleResult = await _roleManager.CreateAsync(new IdentityRole(role));
+                var createRoleResult = await RoleManager.CreateAsync(new IdentityRole(role));
 
                 // Check if role creation succeeded
                 if (!createRoleResult.Succeeded)
@@ -70,10 +64,10 @@ namespace LibraryManagementSystem.Repository.Repositories
             }
 
             // Check if the user is already in the role
-            if (!await _userManager.IsInRoleAsync(user, role))
+            if (!await UserManager.IsInRoleAsync(user, role))
             {
                 // Add the user to the specified role
-                return await _userManager.AddToRoleAsync(user, role);
+                return await UserManager.AddToRoleAsync(user, role);
             }
 
             // Return success if the user is already in the role
@@ -83,7 +77,7 @@ namespace LibraryManagementSystem.Repository.Repositories
 
         public async Task<ApplicationUser> FindByEmailAsync(string email)
         {
-            var identityUser = await _userManager.FindByEmailAsync(email);
+            var identityUser = await UserManager.FindByEmailAsync(email);
 
             if (identityUser != null)
             {
@@ -104,12 +98,12 @@ namespace LibraryManagementSystem.Repository.Repositories
 
         public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
         {
-            return await _userManager.DeleteAsync(user);
+            return await UserManager.DeleteAsync(user);
         }
 
         public async Task SignOutAsync()
         {
-            await _signInManager.SignOutAsync();
+            await SignInManager.SignOutAsync();
         }
 
         //Roles
@@ -119,7 +113,7 @@ namespace LibraryManagementSystem.Repository.Repositories
                 throw new ArgumentNullException(nameof(roleName));
 
             // Check if the role already exists
-            bool roleExists = await _roleManager.RoleExistsAsync(roleName);
+            bool roleExists = await RoleManager.RoleExistsAsync(roleName);
             if (roleExists)
                 return false; // Role already exists
 
@@ -130,18 +124,18 @@ namespace LibraryManagementSystem.Repository.Repositories
             };
 
             // Saves the role in the underlying AspNetRoles table
-            IdentityResult result = await _roleManager.CreateAsync(identityRole);
+            IdentityResult result = await RoleManager.CreateAsync(identityRole);
             return result.Succeeded;
         }
 
         public async Task<List<IdentityRole>> GetAllRolesAsync()
         {
-            return await _roleManager.Roles.ToListAsync();
+            return await RoleManager.Roles.ToListAsync();
         }
 
         public async Task<IdentityResult> UpdateRoleAsync(string roleId, string roleName)
         {
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await RoleManager.FindByIdAsync(roleId);
             if (role == null)
             {
                 return IdentityResult.Failed(new IdentityError { Description = $"Role with Id = {roleId} not found" });
@@ -150,23 +144,23 @@ namespace LibraryManagementSystem.Repository.Repositories
             role.Name = roleName;
             // Update other properties if needed
 
-            return await _roleManager.UpdateAsync(role);
+            return await RoleManager.UpdateAsync(role);
         }
 
         public async Task<IdentityResult> DeleteRoleAsync(string roleId)
         {
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await RoleManager.FindByIdAsync(roleId);
             if (role == null)
             {
                 return IdentityResult.Failed(new IdentityError { Description = $"Role with Id = {roleId} not found" });
             }
 
-            return await _roleManager.DeleteAsync(role);
+            return await RoleManager.DeleteAsync(role);
         }
 
         public async Task<List<UserRoleViewModel>> GetUsersInRoleAsync(string roleId)
         {
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await RoleManager.FindByIdAsync(roleId);
 
             if (role == null)
             {
@@ -175,13 +169,13 @@ namespace LibraryManagementSystem.Repository.Repositories
 
             var model = new List<UserRoleViewModel>();
 
-            foreach (var user in _userManager.Users.ToList())
+            foreach (var user in UserManager.Users.ToList())
             {
                 var userRoleViewModel = new UserRoleViewModel
                 {
                     UserId = user.Id,
                     UserName = user.UserName,
-                    IsSelected = await _userManager.IsInRoleAsync(user, role.Name)
+                    IsSelected = await UserManager.IsInRoleAsync(user, role.Name)
                 };
 
                 model.Add(userRoleViewModel);
@@ -192,7 +186,7 @@ namespace LibraryManagementSystem.Repository.Repositories
 
         public async Task<EditRoleViewModel> GetRoleWithUsers(string roleId)
         {
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await RoleManager.FindByIdAsync(roleId);
             if (role == null)
             {
                 return null; // or throw exception, handle as needed
@@ -205,9 +199,9 @@ namespace LibraryManagementSystem.Repository.Repositories
                 Users = new List<string>()
             };
 
-            foreach (var user in _userManager.Users.ToList())
+            foreach (var user in UserManager.Users.ToList())
             {
-                if (await _userManager.IsInRoleAsync(user, role.Name))
+                if (await UserManager.IsInRoleAsync(user, role.Name))
                 {
                     model.Users.Add(user.UserName);
                 }
@@ -218,7 +212,7 @@ namespace LibraryManagementSystem.Repository.Repositories
 
         public async Task<bool> EditUsersInRoleAsync(List<UserRoleViewModel> model, string roleId)
         {
-            var role = await _roleManager.FindByIdAsync(roleId);
+            var role = await RoleManager.FindByIdAsync(roleId);
             if (role == null)
             {
                 return false; // Role not found
@@ -226,20 +220,20 @@ namespace LibraryManagementSystem.Repository.Repositories
 
             foreach (var userRoleViewModel in model)
             {
-                var user = await _userManager.FindByIdAsync(userRoleViewModel.UserId);
+                var user = await UserManager.FindByIdAsync(userRoleViewModel.UserId);
                 if (user == null)
                 {
                     continue; // Skip if user not found
                 }
 
                 IdentityResult result;
-                if (userRoleViewModel.IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
+                if (userRoleViewModel.IsSelected && !(await UserManager.IsInRoleAsync(user, role.Name)))
                 {
-                    result = await _userManager.AddToRoleAsync(user, role.Name);
+                    result = await UserManager.AddToRoleAsync(user, role.Name);
                 }
-                else if (!userRoleViewModel.IsSelected && await _userManager.IsInRoleAsync(user, role.Name))
+                else if (!userRoleViewModel.IsSelected && await UserManager.IsInRoleAsync(user, role.Name))
                 {
-                    result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+                    result = await UserManager.RemoveFromRoleAsync(user, role.Name);
                 }
                 else
                 {
@@ -257,37 +251,36 @@ namespace LibraryManagementSystem.Repository.Repositories
 
 
         //User
-
         public async Task<List<ApplicationUser>> GetUsersAsync()
         {
-            return await _userManager.Users.ToListAsync();
+            return await UserManager.Users.ToListAsync();
         }
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
         {
-            return await _userManager.FindByIdAsync(userId);
+            return await UserManager.FindByIdAsync(userId);
         }
 
         public async Task<List<string>> GetUserClaimsAsync(ApplicationUser user)
         {
-            var claims = await _userManager.GetClaimsAsync(user);
+            var claims = await UserManager.GetClaimsAsync(user);
             return claims.Select(c => c.Value).ToList();
         }
 
         public async Task<IList<string>> GetUserRolesAsync(ApplicationUser user)
         {
-            return await _userManager.GetRolesAsync(user);
+            return await UserManager.GetRolesAsync(user);
         }
 
         public async Task<bool> UpdateUserAsync(ApplicationUser user)
         {
-            var result = await _userManager.UpdateAsync(user);
+            var result = await UserManager.UpdateAsync(user);
             return result.Succeeded;
         }
 
 
         public async Task<bool> DeleteUserAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await UserManager.FindByIdAsync(userId);
 
             if (user == null)
             {
@@ -295,7 +288,7 @@ namespace LibraryManagementSystem.Repository.Repositories
                 return false;
             }
 
-            var result = await _userManager.DeleteAsync(user);
+            var result = await UserManager.DeleteAsync(user);
 
             return result.Succeeded;
         }
@@ -303,107 +296,7 @@ namespace LibraryManagementSystem.Repository.Repositories
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+////For my reference ignore it.
 //public async Task<IEnumerable<CreateRoleViewModel>> AssignRole()
 //{
 //    var usersWithRoles = from u in _DbContext.AspNetUsers

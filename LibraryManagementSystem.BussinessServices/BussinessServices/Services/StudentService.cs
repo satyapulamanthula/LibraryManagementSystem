@@ -1,30 +1,24 @@
 ﻿using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
     public class StudentService : IStudentService
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IStudentRepository StudentRepository;
         public StudentService(IStudentRepository studentRepository)
         {
-            _studentRepository = studentRepository;
+            StudentRepository = studentRepository;
         }
 
-        public IEnumerable<StudentEnrolmentModel> GetAllStudents()
+        public async Task<IEnumerable<StudentEnrolmentModel>> GetAllStudents()
         {
-            return _studentRepository.GetAllStudents();
+            return await StudentRepository.GetAllStudents();
         }
-        public void CreateStudent(StudentEnrolmentModel student)
+        public async Task CreateStudent(StudentEnrolmentModel student)
         {
-            _studentRepository.CreateStudent(student);
+            await StudentRepository.CreateStudent(student);
         }
     }
 }

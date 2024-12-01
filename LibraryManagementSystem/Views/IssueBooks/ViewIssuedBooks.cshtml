@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<LibraryManagementSystem.SharedModels.Models.IssuedModel>
 
 <div class="container" style="height:610px;">
-    <h2>Viewing Issued Books</h2>
+    <h2>View Issued Books</h2>
     <hr />
     <table id="issuedBooksTable" class="table table-striped table-bordered">
-        <thead>
+        <thead class="table-header">
             <tr>
                 <th>Issued Id</th>
                 <th>Student Id</th>
@@ -19,7 +19,7 @@
                 <th>Is Payed</th>*@
             </tr>
         </thead>
-        <tbody style="background-color:;">
+        <tbody class="table-body">
             @foreach (var bookIssued in Model)
             {
                 <tr>

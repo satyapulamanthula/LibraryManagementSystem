@@ -1,11 +1,8 @@
 ﻿using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Repository.Repositories;
-using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Xunit;
-using Xunit.Sdk;
 
 namespace LibraryManagementSystem.Tests.RepositoryTests
 {

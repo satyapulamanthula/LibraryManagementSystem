@@ -1,40 +1,40 @@
-﻿using LibraryManagementSystem.Services.BussinessServices.IServices;
+﻿using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.Repository.IRepositories;
+using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibraryManagementSystem.Data.Entities;
 
 namespace LibraryManagementSystem.Services.BussinessServices.Services
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly IBookRepository BookRepository;
         public BookService(IBookRepository bookRepository)
         {
-            _bookRepository = bookRepository;
+            BookRepository = bookRepository;
         }
 
-        public void CreateBook(BookModel book)
+        public async Task CreateBook(BookModel book)
         {
-            _bookRepository.CreateBook(book);
+            await BookRepository.CreateBook(book);
         }
 
-        public void CreateCategory(BookCategories bookCategories)
+        public async Task CreateCategory(BookCategories bookCategories)
         {
-            _bookRepository.CreateBookCategory(bookCategories);
+            await BookRepository.CreateBookCategory(bookCategories);
         }
 
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooks()
         {
-            return _bookRepository.GetAllBooks();
+            return await BookRepository.GetAllBooks();
         }
-        public IEnumerable<BooksCategory> GetBookCategories()
+        public async Task<IEnumerable<BooksCategory>> GetBookCategories()
         {
-            return _bookRepository.GetAllBookCatedgories();
+            return await BookRepository.GetAllBookCatedgories();
         }
+
+        //public IEnumerable<Semesters> GetSemestersData()
+        //{
+        //    return BookRepository.GetAllSemesters();
+        //}
     }
 }

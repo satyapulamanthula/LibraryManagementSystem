@@ -8,23 +8,34 @@ namespace LibraryManagementSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IBookService _bookService;
-        private readonly ILogger<HomeController> _logger;
+        private readonly IBookService BookService;
+        private readonly ILogger<HomeController> Logger;
 
         public HomeController(IBookService bookService,ILogger<HomeController> logger)
         {
-            _bookService = bookService;
-            _logger = logger;
+            BookService = bookService;
+            Logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
+            //// Check if the user is authenticated and in the Admin role
+            //if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            //{
+            //    ViewData["Layout"] = "~/Views/Shared/AdminLayout.cshtml";
+            //}
+            //else
+            //{
+            //    ViewData["Layout"] = "~/Views/Shared/UserLayout.cshtml";
+            //}
+
             return View();
         }
 
         public IActionResult Privacy()
         {
-            var roleData = _bookService.GetAllBooks();
+            var roleData = BookService.GetAllBooks();
             return View(roleData);
         }
 

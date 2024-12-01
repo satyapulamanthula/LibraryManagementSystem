@@ -1,18 +1,16 @@
-﻿ using Microsoft.AspNetCore.Mvc;
+﻿using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
-using LibraryManagementSystem.Services.BussinessServices.IServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using LibraryManagementSystem.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 //[Authorize(Roles = "Admin, Staff, Librarian, Student")]
 public class BooksController : Controller
 {
-    private readonly IBookService _bookService;
+    private readonly IBookService BookService;
 
     public BooksController(IBookService bookService)
     {
-        _bookService = bookService;
+        BookService = bookService;
     }
 
     public IActionResult Index()
@@ -45,7 +43,7 @@ public class BooksController : Controller
         //}
         if (book != null)
         {
-            _bookService.CreateBook(book);
+            BookService.CreateBook(book);
 
             // Set success message in TempData
             TempData["SuccessMessage"] = "Book added successfully.";
@@ -69,9 +67,9 @@ public class BooksController : Controller
             };
 
             // Save the new category to the database
-            _bookService.CreateCategory(newCategory);
+            BookService.CreateCategory(newCategory);
             // Set success message
-            ViewBag.SuccessMessage = "Student added successfully.";
+            ViewBag.SuccessMessage = "BookCategorie added successfully.";
             // Return a JSON response indicating success
             return Json(new { success = true });
         }
@@ -84,14 +82,14 @@ public class BooksController : Controller
 
     public IActionResult ViewBooks()
     {
-        var books = _bookService.GetAllBooks();
+        var books = BookService.GetAllBooks();
         return View(books);
     }
 
 
     public IActionResult BookCategories()
     {
-        var categories = _bookService.GetBookCategories();
+        var categories = BookService.GetBookCategories();
 
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
         {
@@ -104,5 +102,11 @@ public class BooksController : Controller
             return View(categories);
         }
     }
+
+    //public IActionResult GetAllSemestersData()
+    //{
+    //    var Semesters = _bookService.GetSemestersData();
+    //    return Json(Semesters);
+    //}
 
 }
