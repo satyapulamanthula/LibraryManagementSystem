@@ -155,10 +155,6 @@ namespace LibraryManagementSystem.Repository.Repositories
             }
         }
 
-        public object GetAllStudents()
-        {
-            throw new NotImplementedException();
-        }
 
 
 
