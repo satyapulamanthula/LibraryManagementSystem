@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Repository.IRepositories;
+﻿using LibraryManagementSystem.Enums;
+using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.AspNetCore.Identity;
@@ -96,7 +97,7 @@ public class AuthController : Controller
                 var user = await AuthenticationService.FindByEmailAsync(model.Email);
 
                 // If no role is specified, assign a default role (e.g., "Student")
-                var defaultRole = "Student";
+                var defaultRole = Roles.Student;//"Student";
                 var addToRoleResult = await AuthenticationService.AssignRoleAsync(user.Id, defaultRole);
 
                 if (!addToRoleResult.Succeeded)
