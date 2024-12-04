@@ -1,15 +1,16 @@
 ﻿using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManagementSystem.Repository.Repositories
 {
     public class ReturnBookRepository : IReturnBookRepository
     {
         private readonly LibraryDbContext DbContext;
-        private readonly ILibraryManagementLogger Logger;
+        private readonly ILogger<ReturnBookRepository> Logger;
 
-        public ReturnBookRepository(LibraryDbContext dbContext, ILibraryManagementLogger libraryManagementLogger)
+        public ReturnBookRepository(LibraryDbContext dbContext, ILogger<ReturnBookRepository> libraryManagementLogger)
         {
             DbContext = dbContext;
             Logger = libraryManagementLogger;

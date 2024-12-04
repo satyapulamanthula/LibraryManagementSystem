@@ -60,14 +60,12 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<List<StudentEnrolmentModel>>(result);
-            Assert.Equal(2, result.Count); // Adjust the count based on the number of dummy books you added
+            Assert.IsType<List<StudentEnrolmentModel>>(result.Result);
+            Assert.Equal(2, result.Result.Count); // Adjust the count based on the number of dummy books you added
         }
 
-
-
         [Fact]
-        public void CreateStudent_ShouldAddStudentToDbContext()
+        public async Task CreateStudent_ShouldAddStudentToDbContext()
         {
             // Arrange
             var options = new DbContextOptionsBuilder<LibraryDbContext>()
@@ -89,69 +87,25 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
 
                 var student = new StudentEnrolmentModel
                 {
-                    StudentName = "New Student",
+                    StudentName = "New Student123",
                     StudentEmail = "NewEmail@gmail.com",
                     StartDate = new DateTime(2024, 3, 14),
                     EndDate = new DateTime(2024, 10, 15),
                     StudentContact = "9876543210",
                     Department = "IT",
-                    Semester = "1"
+                    Semester = "11"
                 };
 
-                repository.CreateStudent(student);
+                await repository.CreateStudent(student);  // Ensure this is awaited as it is async
 
                 // Assert
-                var result = dbContext.StudentEnrolments.FirstOrDefault(s => s.StudentEmail == student.StudentEmail);
+                var result = await dbContext.StudentEnrolments
+                    .FirstOrDefaultAsync(s => s.StudentEmail == student.StudentEmail);
 
-                Assert.NotNull(result);
+                Assert.NotNull(result);  // Ensure the student is found
                 Assert.Equal(student.StudentName, result.StudentName);
                 Assert.Equal(student.StudentEmail, result.StudentEmail);
             }
         }
-
-
-        //[Fact]
-        //public void CreateStudent_ShouldAddStudentToDbContext()
-        //{
-        //    // Arrange
-        //    var options = new DbContextOptionsBuilder<LibraryDbContext>()
-        //        .UseInMemoryDatabase(databaseName: "TestDatabase")
-        //        .Options;
-
-        //    using (var dbContext = new LibraryDbContext(options))
-        //    {
-        //        // Ensure a fresh database for each test
-        //        dbContext.Database.EnsureDeleted();
-        //        dbContext.Database.EnsureCreated();
-        //    }
-
-        //    using (var dbContext = new LibraryDbContext(options))
-        //    {
-        //        // Act
-        //        var loggerMock = new Mock<ILibraryManagementLogger>();
-        //        var repository = new StudentRepository(dbContext, loggerMock.Object);
-
-        //        var student = new StudentEnrolmentModel
-        //        {
-        //            StudentName = "New Student",
-        //            StudentEmail= "NewEmail@gmail.com",
-        //            StartDate = new DateTime(14 / 03 / 2024),
-        //            EndDate = new DateTime(15 / 10 / 2024),
-        //            StudentContact = "9876543210",
-        //            Department = "IT",
-        //            Semester = "1"
-        //        };
-
-        //        repository.CreateStudent(student);
-
-        //        // Assert
-        //        dbContext.Entry(student).State = EntityState.Detached;
-        //        var result = dbContext.StudentEnrolments.Find(student.StudentId);
-
-        //        Assert.NotNull(result);
-        //        Assert.Equal(student.StudentName, student.StudentName);
-        //        Assert.Equal(student.StudentEmail, result.StudentEmail);
-        //    }
-        //}
     }
 }

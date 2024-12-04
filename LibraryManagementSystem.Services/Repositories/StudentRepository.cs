@@ -2,16 +2,16 @@
 using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManagementSystem.Repository.Repositories
 {
     public class StudentRepository : IStudentRepository
     {
+        private readonly ILogger<StudentRepository> Logger;
         private readonly LibraryDbContext DbContext;
 
-        private ILibraryManagementLogger Logger;
-
-        public StudentRepository(LibraryDbContext dbContext, ILibraryManagementLogger logger)
+        public StudentRepository(LibraryDbContext dbContext, ILogger<StudentRepository> logger)
         {
             DbContext = dbContext;
             Logger = logger;
@@ -49,7 +49,7 @@ namespace LibraryManagementSystem.Repository.Repositories
 
                 // Checking that student with the same ID or email already exists or not
                 bool studentExists = await DbContext.StudentEnrolments.AnyAsync(s => s.StudentId == student.StudentId || s.StudentEmail == student.StudentEmail);
-                if (studentExists != null)
+                if (studentExists)
                 {
                     Logger.LogWarning($"Student with ID {student.StudentId} or email {student.StudentEmail} already exists");
                     throw new Exception("Student with the same ID or email already exists");

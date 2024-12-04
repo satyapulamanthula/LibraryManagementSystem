@@ -2,14 +2,15 @@
 using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace LibraryManagementSystem.Repository.Repositories
 {
     public class IssueBookRepository : IIssueBookRepository
     {
         private LibraryDbContext DbContext;
-        private ILibraryManagementLogger Logger;
-        public IssueBookRepository(LibraryDbContext dbContext, ILibraryManagementLogger libraryManagementLogger)
+        private ILogger<IssueBookRepository> Logger;
+        public IssueBookRepository(LibraryDbContext dbContext, ILogger<IssueBookRepository> libraryManagementLogger)
         {
             DbContext = dbContext;
             Logger = libraryManagementLogger;

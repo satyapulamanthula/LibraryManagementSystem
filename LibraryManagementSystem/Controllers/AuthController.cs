@@ -1,4 +1,4 @@
-﻿using LibraryManagementSystem.Enums;
+﻿using LibraryManagementSystem.Constant;
 using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Services.BussinessServices.IServices;
 using LibraryManagementSystem.SharedModels.Models;
@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 public class AuthController : Controller
 {
     private readonly IAuthenticationService AuthenticationService;
-    private ILibraryManagementLogger Logger;
+    private ILogger<AuthController> Logger;
     private readonly RoleManager<IdentityRole> RoleManager;
 
 
-    public AuthController(IAuthenticationService authenticationService, ILibraryManagementLogger libraryManagementLogger, RoleManager<IdentityRole> roleManager)
+    public AuthController(IAuthenticationService authenticationService, ILogger<AuthController> libraryManagementLogger, RoleManager<IdentityRole> roleManager)
     {
         AuthenticationService = authenticationService;
         Logger = libraryManagementLogger;
