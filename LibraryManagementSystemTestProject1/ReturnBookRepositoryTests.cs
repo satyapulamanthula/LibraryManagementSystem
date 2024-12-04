@@ -1,7 +1,9 @@
-﻿using LibraryManagementSystem.Data.Entities;
+﻿using Castle.Core.Logging;
+using LibraryManagementSystem.Data.Entities;
 using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace LibraryManagementSystem.Tests.RepositoryTests
@@ -32,7 +34,7 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
                 dbContext.AddRange(issuedBooks);
                 dbContext.SaveChanges();
 
-                var loggerMock = new Mock<ILibraryManagementLogger>();
+                var loggerMock = new Mock<ILogger<ReturnBookRepository>>();
                 var repository = new ReturnBookRepository(dbContext, loggerMock.Object);
 
                 var issuedBookIds = new List<int> { 1, 2, 3 };
@@ -76,7 +78,7 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
                 dbContext.AddRange(issuedBooks);
                 dbContext.SaveChanges();
 
-                var loggerMock = new Mock<ILibraryManagementLogger>();
+                var loggerMock = new Mock<ILogger<ReturnBookRepository>>();
                 var repository = new ReturnBookRepository(dbContext, loggerMock.Object);
 
                 var issuedBookIds = new List<int> { 1, 2, 3 };

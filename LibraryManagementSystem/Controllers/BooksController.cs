@@ -80,16 +80,16 @@ public class BooksController : Controller
         }
     }
 
-    public IActionResult ViewBooks()
+    public async Task<IActionResult> ViewBooks()
     {
-        var books = BookService.GetAllBooks();
+        var books = await BookService.GetAllBooks();
         return View(books);
     }
 
 
-    public IActionResult BookCategories()
+    public async  Task<IActionResult> BookCategories()
     {
-        var categories = BookService.GetBookCategories();
+        var categories = await BookService.GetBookCategories();
 
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
         {

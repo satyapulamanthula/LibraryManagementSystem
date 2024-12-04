@@ -3,6 +3,7 @@ using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Repository.Repositories;
 using LibraryManagementSystem.SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace LibraryManagementSystem.Tests.RepositoryTests
@@ -20,7 +21,7 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
 
             var dbContext = new LibraryDbContext(dbContextOptions); // Initialize your context with in-memory options
 
-            var loggerMock = new Mock<ILibraryManagementLogger>();
+            var loggerMock = new Mock<ILogger<StudentRepository>>();
             var repository = new StudentRepository(dbContext, loggerMock.Object);
 
 
@@ -82,7 +83,7 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
             using (var dbContext = new LibraryDbContext(options))
             {
                 // Act
-                var loggerMock = new Mock<ILibraryManagementLogger>();
+                var loggerMock = new Mock<ILogger<StudentRepository>>();
                 var repository = new StudentRepository(dbContext, loggerMock.Object);
 
                 var student = new StudentEnrolmentModel

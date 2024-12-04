@@ -2,6 +2,7 @@
 using LibraryManagementSystem.Repository.IRepositories;
 using LibraryManagementSystem.Repository.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace LibraryManagementSystem.Tests.RepositoryTests
@@ -26,7 +27,7 @@ namespace LibraryManagementSystem.Tests.RepositoryTests
             using (var dbContext = new LibraryDbContext(options))
             {
                 // Act
-                var loggerMock = new Mock<ILibraryManagementLogger>();
+                var loggerMock = new Mock<ILogger<IssueBookRepository>>();
                 var repository = new IssueBookRepository(dbContext, loggerMock.Object);
 
                 var issued = new Issued

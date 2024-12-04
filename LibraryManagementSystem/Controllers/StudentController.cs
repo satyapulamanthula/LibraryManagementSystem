@@ -57,9 +57,9 @@ namespace LibraryManagementSystem.Controllers
             }
         }
 
-        public IActionResult ViewStudents()
+        public async Task<IActionResult> ViewStudents()
         {
-            var students = StudentService.GetAllStudents();
+            var students = await StudentService.GetAllStudents();
             return View(students);
         }
     }

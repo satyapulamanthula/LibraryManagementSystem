@@ -25,7 +25,6 @@ builder.Services.AddScoped<IReturnBookRepository, ReturnBookRepository>();
 builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
 // Register Services
-builder.Services.AddScoped<ILibraryManagementLogger, LibraryManagementLogger>();
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IIssuedBookService, IssuedBookService>();
